@@ -1,0 +1,77 @@
+.login-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 0;
+  background: url('/ched-logo.png') center / contain no-repeat;
+}
+
+.login-icon > svg {
+  display: none;
+}
+
+/* Labeled record cards keep phone screens free of sideways table scrolling. */
+.public-shell{width:100%;min-width:0}
+.public-content{flex:1 0 auto}
+.stack-lg{grid-template-columns:minmax(0,1fr)}
+.form-section-title>div,.ticket-progress li>div{min-width:0}
+.form-section-title p{overflow-wrap:anywhere;line-height:1.6}
+.public-footer>span{min-width:0;overflow-wrap:anywhere}
+@media(max-width:720px){
+  /* Keep the current step's buttons reachable on tall mobile forms. */
+  .form-panel:has(>.ticket-progress){overflow:visible}
+  .form-panel>.form-actions{
+    position:sticky;
+    bottom:0;
+    z-index:10;
+    background:#fff;
+    margin-inline:-16px;
+    margin-bottom:-16px;
+    padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));
+    border-radius:0 0 12px 12px;
+    box-shadow:0 -6px 18px #172b4d0a;
+  }
+  .form-grid,.detail-grid{grid-template-columns:minmax(0,1fr)}
+  .public-content,.public-footer{max-width:100%}
+  .public-content>.stack-lg{width:100%}
+  .form-panel,.ticket-progress,.form-section-title,.form-actions{min-width:0;max-width:100%}
+  .form-grid input,.form-grid select,.form-grid textarea{max-width:100%}
+  .public-footer{align-items:flex-start;flex-direction:column;gap:4px}
+  .mobile-records{display:block;min-width:0}
+  .mobile-records thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .mobile-records tbody{display:block;padding:12px}
+  .mobile-records tr{display:block;border:1px solid #e7ecf3;border-radius:10px;overflow:hidden;background:#fff}
+  .mobile-records tr+tr{margin-top:12px}
+  .mobile-records td{display:grid;grid-template-columns:minmax(80px,30%) minmax(0,1fr);align-items:center;gap:12px;padding:10px 12px;font-size:13px;overflow-wrap:anywhere}
+  .mobile-records td:first-child{border-top:0;background:#f9fafc}
+  .mobile-records td::before{content:attr(data-label);font-size:10px;font-weight:700;color:#7c899a;letter-spacing:.04em;text-transform:uppercase}
+  .mobile-records td.truncate{max-width:none;white-space:normal;overflow:visible}
+  .mobile-records td b{font-size:13px}
+  .mobile-records .cell-sub{grid-column:2;margin-top:-7px;font-size:12px}
+  .mobile-records td a{justify-self:start;min-width:44px}
+  .mobile-records td .btn{justify-self:start}
+  .mobile-records td.empty{display:block;padding:26px 16px;text-align:center}
+  .mobile-records td.empty::before{display:none}
+  .back-link{min-height:44px;width:fit-content;font-size:12px}
+  .app-dialog-close{min-width:44px;min-height:44px}
+  .app-dialog-actions{flex-wrap:wrap}
+  .app-dialog-actions .btn,.vehicle-dialog-actions .btn{flex:1 1 100px}
+  .page-heading p,.panel-heading p{line-height:1.6}
+  .detail-grid small{font-size:11px;line-height:1.5}
+  .detail-grid b{font-size:14px;line-height:1.6}
+  .muted{line-height:1.6}
+  .public-brand{gap:10px;min-width:0}
+  .public-brand>div{min-width:0}
+}
+@media(max-width:380px){
+  .page-content{padding-inline:10px}
+  .topbar{padding-inline:10px;gap:6px}
+  .topbar .eyebrow{letter-spacing:.05em}
+  .app-dialog{padding:18px}
+  .mobile-records tbody{padding:8px}
+  .mobile-records td{gap:8px;padding-inline:10px}
+}
+@media(max-height:500px) and (max-width:960px){
+  .sidebar .brand{padding-bottom:12px}
+  .sidebar .office-label{padding-top:12px}
+  .sidebar-bottom{padding-top:12px}
+}

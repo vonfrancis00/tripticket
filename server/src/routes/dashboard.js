@@ -1,0 +1,2 @@
+import {tripAccessFilter} from '../utils/tripAccess.js';
+import {Router} from 'express';import TripTicket from '../models/TripTicket.js';const r=Router();r.get('/',async(req,res)=>{const filter=tripAccessFilter(req.user);const [total,recent]=await Promise.all([TripTicket.countDocuments(filter),TripTicket.find(filter).sort({createdAt:-1}).limit(8).lean()]);res.json({stats:{total},recent})});export default r;

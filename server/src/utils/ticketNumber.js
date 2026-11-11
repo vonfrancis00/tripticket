@@ -1,0 +1,2 @@
+import TripTicket from '../models/TripTicket.js';
+export async function nextTicketNumber(date=new Date()){const year=new Date(date).getFullYear();const prefix=`CHED-TT-${year}-`;const last=await TripTicket.findOne({ticketNo:new RegExp(`^${prefix}`)}).sort({ticketNo:-1}).select('ticketNo').lean();const n=last?Number(last.ticketNo.split('-').at(-1))+1:1;return `${prefix}${String(n).padStart(5,'0')}`;}

@@ -1,0 +1,48 @@
+name: ched-trip-ticket
+region: sgp
+services:
+  - name: trip-ticket-web
+    environment_slug: node-js
+    github:
+      repo: YOUR_GITHUB_USERNAME/ched-trip-ticket
+      branch: main
+      deploy_on_push: true
+    source_dir: /
+    build_command: npm install && npm run build
+    run_command: npm start
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    envs:
+      - key: NODE_ENV
+        value: production
+        scope: RUN_TIME
+      - key: JWT_EXPIRES_IN
+        value: 8h
+        scope: RUN_TIME
+      - key: JWT_SECRET
+        value: REPLACE_WITH_LONG_RANDOM_SECRET
+        type: SECRET
+        scope: RUN_TIME
+      - key: MONGODB_URI
+        value: ${trip-ticket-db.DATABASE_URL}
+        scope: RUN_TIME
+      - key: MONGO_CA_CERT
+        value: ${trip-ticket-db.CA_CERT}
+        scope: RUN_TIME
+      - key: SEED_ADMIN
+        value: "true"
+        scope: RUN_TIME
+      - key: SEED_ADMIN_EMAIL
+        value: admin@ched.gov.ph
+        scope: RUN_TIME
+      - key: SEED_ADMIN_PASSWORD
+        value: CHANGE_THIS_BEFORE_DEPLOY
+        type: SECRET
+        scope: RUN_TIME
+databases:
+  - name: trip-ticket-db
+    engine: MONGODB
+    version: "7"
+    production: true
+    cluster_name: REPLACE_WITH_EXISTING_MANAGED_MONGODB_CLUSTER_NAME

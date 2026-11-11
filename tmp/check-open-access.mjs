@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import tickets from '../server/src/routes/tickets.js';
+import vehicles from '../server/src/routes/vehicles.js';
+import users from '../server/src/routes/users.js';
+import dashboard from '../server/src/routes/dashboard.js';
+import TripTicket from '../server/src/models/TripTicket.js';
+import Vehicle from '../server/src/models/Vehicle.js';
+import User from '../server/src/models/User.js';
+const query = rows => ({ sort(){return this}, limit(){return this}, lean(){return Promise.resolve(rows)}, then(resolve,reject){return Promise.resolve(rows).then(resolve,reject)} });
+TripTicket.find = filter => {assert.deepEqual(filter, {}); return query([])};
+TripTicket.countDocuments = async filter => {assert.deepEqual(filter, {}); return 0};
+Vehicle.find = () => query([]);
+User.find = () => ({ select(){return query([])} });
+const ticket = {report:{}, save:async()=>{}};
+TripTicket.findById = async()=>ticket;
+Vehicle.create = async body=>body;
+async function call(router,method,path,body={}) {
+ const route=router.stack.find(layer=>layer.route?.path===path&&layer.route.methods[method]).route;
+ assert.equal(route.stack.length,1,'Unexpected route permission middleware');
+ let payload; const res={status(){return this},json(data){payload=data}};
+ await route.stack[0].handle({query:{},params:{id:'example'},body},res,()=>{throw Error('Unexpected middleware')});
+ assert.ok(payload); return payload;
+}
+await call(tickets,'get','/');
+await call(tickets,'get','/:id');
+await call(tickets,'put','/:id',{purpose:'Updated without login'});
+assert.equal(ticket.purpose,'Updated without login');
+await call(tickets,'put','/:id/report',{departureTime:'08:00',arrivalTime:'09:00',destinationDepartureTime:'10:00',returnTime:'11:00',speedometerStart:10,speedometerEnd:20});
+await call(vehicles,'get','/');
+await call(vehicles,'post','/',{plateNumber:'TEST'});
+await call(users,'get','/');
+await call(dashboard,'get','/');
+const doc=new TripTicket({travelDate:new Date(),driverName:'Driver',passengerName:'Passenger',destination:'Office',purpose:'Meeting'});
+assert.equal(doc.validateSync(),undefined,'Ticket must validate without createdBy');
+console.log('Passed: anonymous list, detail, edit, report, vehicle creation, users, dashboard, and ticket validation without an account.');
