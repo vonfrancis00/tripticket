@@ -1,13 +1,17 @@
+import TimeInput from '../components/TimeInput';
 import { formatPassengerNames } from '../lib/passengerNames';
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, Edit3, FileDown } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft, CheckCircle2, Edit3, FileDown, LoaderCircle } from 'lucide-react';
+import { showDialog } from '../lib/dialog';
 import api from '../lib/api';
 import { makePdf } from '../lib/tripTicketPdf';
 export { makePdf } from '../lib/tripTicketPdf';
 const val = (x) => x ?? '—';
 const num = (x) => Number(x || 0);
 export default function TicketDetail() {
+  const navigate = useNavigate();
+  const savingRef = useRef(false);
   const { id } = useParams(),
     [t, setT] = useState(null),
     [report, setReport] = useState({}),
@@ -26,13 +30,18 @@ export default function TicketDetail() {
   }, [id]);
   const saveReport = async (e) => {
     e.preventDefault();
+    if (savingRef.current) return;
+    savingRef.current = true;
     setBusy(true);
+    setError('');
     try {
       await api.put(`/tickets/${id}/report`, report);
-      await load();
+      await showDialog({ type: 'success', title: 'Trip saved successfully', message: 'Your driver report has been saved.', confirmLabel: 'Back to trip preview' });
+      navigate(`/tickets/${id}/preview`);
     } catch (e) {
       setError(e.response?.data?.message || 'Unable to save driver report.');
     } finally {
+      savingRef.current = false;
       setBusy(false);
     }
   };
@@ -49,12 +58,16 @@ export default function TicketDetail() {
     <label>
       {label}
       {requiredReportFields.includes(key) ? ' *' : ''}
+      {type === 'time' ? (
+        <TimeInput label={label} value={report[key] ?? ''} required={requiredReportFields.includes(key)} onChange={(value) => setReport((p) => ({ ...p, [key]: value }))} />
+      ) : (
       <input
         required={requiredReportFields.includes(key)}
         type={type}
         value={report[key] ?? ''}
         onChange={(e) => setReport((p) => ({ ...p, [key]: e.target.value }))}
       />
+      )}
     </label>
   );
   return (
@@ -212,7 +225,7 @@ export default function TicketDetail() {
             Driver and passenger signatures are signed on the printed copy.
           </span>
           <button className="btn primary" disabled={busy}>
-            <CheckCircle2 size={17} />
+            {busy ? <LoaderCircle size={17} className="app-dialog-spinner" aria-hidden="true" /> : <CheckCircle2 size={17} />}
             {busy ? 'Saving…' : 'Save driver report'}
           </button>
         </div>

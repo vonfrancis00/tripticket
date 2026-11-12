@@ -1,10 +1,20 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import mongoose from 'mongoose';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 export async function connectDB(){
   if(!process.env.MONGODB_URI) throw new Error('MONGODB_URI is required.');
   const options={serverSelectionTimeoutMS:15000};
-  if(process.env.MONGO_CA_CERT?.trim()) options.tls=true,options.tlsCAFile='/tmp/do-mongo-ca.crt';
+  let certDirectory;
+  if(process.env.MONGO_CA_CERT?.trim()) {
+    certDirectory=fs.mkdtempSync(path.join(os.tmpdir(),'trip-ticket-mongo-'));
+    options.tls=true;
+    options.tlsCAFile=path.join(certDirectory,'ca.crt');
+    fs.writeFileSync(options.tlsCAFile,process.env.MONGO_CA_CERT,{mode:0o600});
+  }
+  try {
   await mongoose.connect(process.env.MONGODB_URI,options);
   if (process.env.SEED_ADMIN === 'true') {
     const email = (process.env.SEED_ADMIN_EMAIL || 'admin@ched.gov.ph').trim().toLowerCase();
@@ -15,4 +25,10 @@ export async function connectDB(){
     }
   }
   console.log(`MongoDB connected: ${mongoose.connection.host}`);
+  } catch(error) {
+    await mongoose.disconnect();
+    if(certDirectory) fs.rmSync(certDirectory,{recursive:true,force:true});
+    throw error;
+  }
+  if(certDirectory) process.once('exit',()=>fs.rmSync(certDirectory,{recursive:true,force:true}));
 }

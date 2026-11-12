@@ -1,0 +1,260 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/App.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=43d30801"; const Fragment = __vite__cjsImport0_react_jsxDevRuntime["Fragment"]; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+let prevRefreshReg;
+let prevRefreshSig;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  prevRefreshReg = window.$RefreshReg$;
+  prevRefreshSig = window.$RefreshSig$;
+  window.$RefreshReg$ = RefreshRuntime.getRefreshReg("C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx");
+  window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
+}
+var _s = $RefreshSig$();
+import TicketPreview from "/src/pages/TicketPreview.jsx?t=1794450646974";
+import AppDialog from "/src/components/AppDialog.jsx";
+import { Routes, Route, Navigate } from "/node_modules/.vite/deps/react-router-dom.js?v=43d30801";
+import Layout from "/src/components/Layout.jsx";
+import Dashboard from "/src/pages/Dashboard.jsx";
+import Tickets from "/src/pages/Tickets.jsx";
+import TicketForm from "/src/pages/TicketForm.jsx?t=1794450646974";
+import MultipleDateTrips from "/src/pages/MultipleDateTrips.jsx";
+import TicketDetail from "/src/pages/TicketDetail.jsx";
+import Vehicles from "/src/pages/Vehicles.jsx";
+import Users from "/src/pages/Users.jsx";
+import Reports from "/src/pages/Reports.jsx";
+import Login from "/src/pages/Login.jsx";
+import Protected from "/src/components/Protected.jsx";
+import PublicLayout from "/src/components/PublicLayout.jsx";
+import { useAuth } from "/src/context/AuthContext.jsx";
+export default function App() {
+  _s();
+  const { user, loading } = useAuth();
+  if (loading) return /* @__PURE__ */ jsxDEV("div", { className: "loading-screen", children: "Loading your workspace..." }, void 0, false, {
+    fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+    lineNumber: 38,
+    columnNumber: 23
+  }, this);
+  return /* @__PURE__ */ jsxDEV(Fragment, { children: [
+    /* @__PURE__ */ jsxDEV(AppDialog, {}, void 0, false, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+      lineNumber: 40,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV(Routes, { children: [
+      /* @__PURE__ */ jsxDEV(Route, { path: "/", element: /* @__PURE__ */ jsxDEV(Navigate, { to: user ? "/dashboard" : "/request", replace: true }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 41,
+        columnNumber: 32
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 41,
+        columnNumber: 7
+      }, this),
+      /* @__PURE__ */ jsxDEV(Route, { path: "/login", element: user ? /* @__PURE__ */ jsxDEV(Navigate, { to: "/dashboard", replace: true }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 42,
+        columnNumber: 44
+      }, this) : /* @__PURE__ */ jsxDEV(Login, {}, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 42,
+        columnNumber: 83
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 42,
+        columnNumber: 7
+      }, this),
+      /* @__PURE__ */ jsxDEV(Route, { element: /* @__PURE__ */ jsxDEV(PublicLayout, {}, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 43,
+        columnNumber: 23
+      }, this), children: /* @__PURE__ */ jsxDEV(Route, { path: "/request", element: user ? /* @__PURE__ */ jsxDEV(Navigate, { to: "/dashboard", replace: true }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 44,
+        columnNumber: 48
+      }, this) : /* @__PURE__ */ jsxDEV(TicketForm, { publicMode: true }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 44,
+        columnNumber: 87
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 44,
+        columnNumber: 9
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 43,
+        columnNumber: 7
+      }, this),
+      /* @__PURE__ */ jsxDEV(
+        Route,
+        {
+          path: "/",
+          element: /* @__PURE__ */ jsxDEV(Protected, { children: /* @__PURE__ */ jsxDEV(Layout, {}, void 0, false, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+            lineNumber: 49,
+            columnNumber: 22
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+            lineNumber: 49,
+            columnNumber: 11
+          }, this),
+          children: [
+            /* @__PURE__ */ jsxDEV(Route, { path: "dashboard", element: /* @__PURE__ */ jsxDEV(Dashboard, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 52,
+              columnNumber: 42
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 52,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(Route, { path: "tickets", element: /* @__PURE__ */ jsxDEV(Tickets, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 53,
+              columnNumber: 40
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 53,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(Route, { path: "tickets/new", element: /* @__PURE__ */ jsxDEV(TicketForm, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 54,
+              columnNumber: 44
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 54,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(Route, { path: "tickets/multiple-dates", element: /* @__PURE__ */ jsxDEV(MultipleDateTrips, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 55,
+              columnNumber: 55
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 55,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(Route, { path: "tickets/:id", element: /* @__PURE__ */ jsxDEV(TicketDetail, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 56,
+              columnNumber: 44
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 56,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(Route, { path: "tickets/:id/preview", element: /* @__PURE__ */ jsxDEV(TicketPreview, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 57,
+              columnNumber: 52
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 57,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(Route, { path: "tickets/:id/edit", element: /* @__PURE__ */ jsxDEV(TicketForm, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 58,
+              columnNumber: 49
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 58,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(Route, { path: "vehicles", element: /* @__PURE__ */ jsxDEV(Protected, { roles: ["admin", "admin_officer"], children: /* @__PURE__ */ jsxDEV(Vehicles, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 59,
+              columnNumber: 87
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 59,
+              columnNumber: 41
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 59,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(Route, { path: "users", element: /* @__PURE__ */ jsxDEV(Protected, { roles: ["admin"], children: /* @__PURE__ */ jsxDEV(Users, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 60,
+              columnNumber: 67
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 60,
+              columnNumber: 38
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 60,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV(Route, { path: "reports", element: /* @__PURE__ */ jsxDEV(Protected, { roles: ["admin", "admin_officer"], children: /* @__PURE__ */ jsxDEV(Reports, {}, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 61,
+              columnNumber: 86
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 61,
+              columnNumber: 40
+            }, this) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+              lineNumber: 61,
+              columnNumber: 9
+            }, this)
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+          lineNumber: 46,
+          columnNumber: 7
+        },
+        this
+      ),
+      /* @__PURE__ */ jsxDEV(Route, { path: "*", element: /* @__PURE__ */ jsxDEV(Navigate, { to: "/", replace: true }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 63,
+        columnNumber: 32
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+        lineNumber: 63,
+        columnNumber: 7
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+      lineNumber: 40,
+      columnNumber: 20
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx",
+    lineNumber: 40,
+    columnNumber: 5
+  }, this);
+}
+_s(App, "EmJkapf7qiLC5Br5eCoEq4veZes=", false, function() {
+  return [useAuth];
+});
+_c = App;
+var _c;
+$RefreshReg$(_c, "App");
+if (import.meta.hot && !inWebWorker) {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+if (import.meta.hot && !inWebWorker) {
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/App.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6IkFBa0JzQixTQUVsQixVQUZrQjs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFsQnRCLE9BQU9BLG1CQUFtQjtBQUMxQixPQUFPQyxlQUFlO0FBQ3RCLFNBQVNDLFFBQVFDLE9BQU9DLGdCQUFnQjtBQUN4QyxPQUFPQyxZQUFZO0FBQ25CLE9BQU9DLGVBQWU7QUFDdEIsT0FBT0MsYUFBYTtBQUNwQixPQUFPQyxnQkFBZ0I7QUFDdkIsT0FBT0MsdUJBQXVCO0FBQzlCLE9BQU9DLGtCQUFrQjtBQUN6QixPQUFPQyxjQUFjO0FBQ3JCLE9BQU9DLFdBQVc7QUFDbEIsT0FBT0MsYUFBYTtBQUNwQixPQUFPQyxXQUFXO0FBQ2xCLE9BQU9DLGVBQWU7QUFDdEIsT0FBT0Msa0JBQWtCO0FBQ3pCLFNBQVNDLGVBQWU7QUFDeEIsd0JBQXdCQyxNQUFNO0FBQUFDLEtBQUE7QUFDNUIsUUFBTSxFQUFFQyxNQUFNQyxRQUFRLElBQUlKLFFBQVE7QUFDbEMsTUFBSUksUUFBUyxRQUFPLHVCQUFDLFNBQUksV0FBVSxrQkFBaUIseUNBQWhDO0FBQUE7QUFBQTtBQUFBO0FBQUEsU0FBeUQ7QUFDN0UsU0FDRSxtQ0FBRTtBQUFBLDJCQUFDLGVBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFVO0FBQUEsSUFBRyx1QkFBQyxVQUNkO0FBQUEsNkJBQUMsU0FBTSxNQUFLLEtBQUksU0FBUyx1QkFBQyxZQUFTLElBQUlELE9BQU8sZUFBZSxZQUFZLFNBQU8sUUFBdkQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxhQUF1RCxLQUFoRjtBQUFBO0FBQUE7QUFBQTtBQUFBLGFBQW9GO0FBQUEsTUFDcEYsdUJBQUMsU0FBTSxNQUFLLFVBQVMsU0FBU0EsT0FBTyx1QkFBQyxZQUFTLElBQUcsY0FBYSxTQUFPLFFBQWpDO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUFBaUMsSUFBTSx1QkFBQyxXQUFEO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUFBTSxLQUFsRjtBQUFBO0FBQUE7QUFBQTtBQUFBLGFBQXNGO0FBQUEsTUFDdEYsdUJBQUMsU0FBTSxTQUFTLHVCQUFDLGtCQUFEO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUFBYSxHQUMzQixpQ0FBQyxTQUFNLE1BQUssWUFBVyxTQUFTQSxPQUFPLHVCQUFDLFlBQVMsSUFBRyxjQUFhLFNBQU8sUUFBakM7QUFBQTtBQUFBO0FBQUE7QUFBQSxhQUFpQyxJQUFNLHVCQUFDLGNBQVcsWUFBVSxRQUF0QjtBQUFBO0FBQUE7QUFBQTtBQUFBLGFBQXNCLEtBQXBHO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUFBd0csS0FEMUc7QUFBQTtBQUFBO0FBQUE7QUFBQSxhQUVBO0FBQUEsTUFDQTtBQUFBLFFBQUM7QUFBQTtBQUFBLFVBQ0MsTUFBSztBQUFBLFVBQ0wsU0FDRSx1QkFBQyxhQUFVLGlDQUFDLFlBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxpQkFBTyxLQUFsQjtBQUFBO0FBQUE7QUFBQTtBQUFBLGlCQUFxQjtBQUFBLFVBR3ZCO0FBQUEsbUNBQUMsU0FBTSxNQUFLLGFBQVksU0FBUyx1QkFBQyxlQUFEO0FBQUE7QUFBQTtBQUFBO0FBQUEsbUJBQVUsS0FBM0M7QUFBQTtBQUFBO0FBQUE7QUFBQSxtQkFBK0M7QUFBQSxZQUMvQyx1QkFBQyxTQUFNLE1BQUssV0FBVSxTQUFTLHVCQUFDLGFBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxtQkFBUSxLQUF2QztBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUEyQztBQUFBLFlBQzNDLHVCQUFDLFNBQU0sTUFBSyxlQUFjLFNBQVMsdUJBQUMsZ0JBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxtQkFBVyxLQUE5QztBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUFrRDtBQUFBLFlBQ2xELHVCQUFDLFNBQU0sTUFBSywwQkFBeUIsU0FBUyx1QkFBQyx1QkFBRDtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUFrQixLQUFoRTtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUFvRTtBQUFBLFlBQ3BFLHVCQUFDLFNBQU0sTUFBSyxlQUFjLFNBQVMsdUJBQUMsa0JBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxtQkFBYSxLQUFoRDtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUFvRDtBQUFBLFlBQ3BELHVCQUFDLFNBQU0sTUFBSyx1QkFBc0IsU0FBUyx1QkFBQyxtQkFBRDtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUFjLEtBQXpEO0FBQUE7QUFBQTtBQUFBO0FBQUEsbUJBQTZEO0FBQUEsWUFDN0QsdUJBQUMsU0FBTSxNQUFLLG9CQUFtQixTQUFTLHVCQUFDLGdCQUFEO0FBQUE7QUFBQTtBQUFBO0FBQUEsbUJBQVcsS0FBbkQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxtQkFBdUQ7QUFBQSxZQUN2RCx1QkFBQyxTQUFNLE1BQUssWUFBVyxTQUFTLHVCQUFDLGFBQVUsT0FBTyxDQUFDLFNBQVMsZUFBZSxHQUFHLGlDQUFDLGNBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxtQkFBUyxLQUF2RDtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUEwRCxLQUExRjtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUF1RztBQUFBLFlBQ3ZHLHVCQUFDLFNBQU0sTUFBSyxTQUFRLFNBQVMsdUJBQUMsYUFBVSxPQUFPLENBQUMsT0FBTyxHQUFHLGlDQUFDLFdBQUQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxtQkFBTSxLQUFuQztBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUFzQyxLQUFuRTtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUFnRjtBQUFBLFlBQ2hGLHVCQUFDLFNBQU0sTUFBSyxXQUFVLFNBQVMsdUJBQUMsYUFBVSxPQUFPLENBQUMsU0FBUyxlQUFlLEdBQUcsaUNBQUMsYUFBRDtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUFRLEtBQXREO0FBQUE7QUFBQTtBQUFBO0FBQUEsbUJBQXlELEtBQXhGO0FBQUE7QUFBQTtBQUFBO0FBQUEsbUJBQXFHO0FBQUE7QUFBQTtBQUFBLFFBZnZHO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxNQWdCQTtBQUFBLE1BQ0EsdUJBQUMsU0FBTSxNQUFLLEtBQUksU0FBUyx1QkFBQyxZQUFTLElBQUcsS0FBSSxTQUFPLFFBQXhCO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUFBd0IsS0FBakQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxhQUFxRDtBQUFBLFNBdkJ4QztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBd0JmO0FBQUEsT0F4QkE7QUFBQTtBQUFBO0FBQUE7QUFBQSxTQXdCUztBQUViO0FBQUNELEdBOUJ1QkQsS0FBRztBQUFBLFVBQ0NELE9BQU87QUFBQTtBQUFBLEtBRFhDO0FBQUcsSUFBQUk7QUFBQSxhQUFBQSxJQUFBIiwibmFtZXMiOlsiVGlja2V0UHJldmlldyIsIkFwcERpYWxvZyIsIlJvdXRlcyIsIlJvdXRlIiwiTmF2aWdhdGUiLCJMYXlvdXQiLCJEYXNoYm9hcmQiLCJUaWNrZXRzIiwiVGlja2V0Rm9ybSIsIk11bHRpcGxlRGF0ZVRyaXBzIiwiVGlja2V0RGV0YWlsIiwiVmVoaWNsZXMiLCJVc2VycyIsIlJlcG9ydHMiLCJMb2dpbiIsIlByb3RlY3RlZCIsIlB1YmxpY0xheW91dCIsInVzZUF1dGgiLCJBcHAiLCJfcyIsInVzZXIiLCJsb2FkaW5nIiwiX2MiXSwiaWdub3JlTGlzdCI6W10sInNvdXJjZXMiOlsiQXBwLmpzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgVGlja2V0UHJldmlldyBmcm9tICcuL3BhZ2VzL1RpY2tldFByZXZpZXcnO1xyXG5pbXBvcnQgQXBwRGlhbG9nIGZyb20gJy4vY29tcG9uZW50cy9BcHBEaWFsb2cnO1xyXG5pbXBvcnQgeyBSb3V0ZXMsIFJvdXRlLCBOYXZpZ2F0ZSB9IGZyb20gJ3JlYWN0LXJvdXRlci1kb20nO1xyXG5pbXBvcnQgTGF5b3V0IGZyb20gJy4vY29tcG9uZW50cy9MYXlvdXQnO1xyXG5pbXBvcnQgRGFzaGJvYXJkIGZyb20gJy4vcGFnZXMvRGFzaGJvYXJkJztcclxuaW1wb3J0IFRpY2tldHMgZnJvbSAnLi9wYWdlcy9UaWNrZXRzJztcclxuaW1wb3J0IFRpY2tldEZvcm0gZnJvbSAnLi9wYWdlcy9UaWNrZXRGb3JtJztcclxuaW1wb3J0IE11bHRpcGxlRGF0ZVRyaXBzIGZyb20gJy4vcGFnZXMvTXVsdGlwbGVEYXRlVHJpcHMnO1xyXG5pbXBvcnQgVGlja2V0RGV0YWlsIGZyb20gJy4vcGFnZXMvVGlja2V0RGV0YWlsJztcclxuaW1wb3J0IFZlaGljbGVzIGZyb20gJy4vcGFnZXMvVmVoaWNsZXMnO1xyXG5pbXBvcnQgVXNlcnMgZnJvbSAnLi9wYWdlcy9Vc2Vycyc7XHJcbmltcG9ydCBSZXBvcnRzIGZyb20gJy4vcGFnZXMvUmVwb3J0cyc7XHJcbmltcG9ydCBMb2dpbiBmcm9tICcuL3BhZ2VzL0xvZ2luJztcclxuaW1wb3J0IFByb3RlY3RlZCBmcm9tICcuL2NvbXBvbmVudHMvUHJvdGVjdGVkJztcclxuaW1wb3J0IFB1YmxpY0xheW91dCBmcm9tICcuL2NvbXBvbmVudHMvUHVibGljTGF5b3V0JztcclxuaW1wb3J0IHsgdXNlQXV0aCB9IGZyb20gJy4vY29udGV4dC9BdXRoQ29udGV4dCc7XHJcbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEFwcCgpIHtcclxuICBjb25zdCB7IHVzZXIsIGxvYWRpbmcgfSA9IHVzZUF1dGgoKTtcclxuICBpZiAobG9hZGluZykgcmV0dXJuIDxkaXYgY2xhc3NOYW1lPVwibG9hZGluZy1zY3JlZW5cIj5Mb2FkaW5nIHlvdXIgd29ya3NwYWNlLi4uPC9kaXY+O1xyXG4gIHJldHVybiAoXHJcbiAgICA8PjxBcHBEaWFsb2cgLz48Um91dGVzPlxyXG4gICAgICA8Um91dGUgcGF0aD1cIi9cIiBlbGVtZW50PXs8TmF2aWdhdGUgdG89e3VzZXIgPyAnL2Rhc2hib2FyZCcgOiAnL3JlcXVlc3QnfSByZXBsYWNlIC8+fSAvPlxyXG4gICAgICA8Um91dGUgcGF0aD1cIi9sb2dpblwiIGVsZW1lbnQ9e3VzZXIgPyA8TmF2aWdhdGUgdG89XCIvZGFzaGJvYXJkXCIgcmVwbGFjZSAvPiA6IDxMb2dpbiAvPn0gLz5cclxuICAgICAgPFJvdXRlIGVsZW1lbnQ9ezxQdWJsaWNMYXlvdXQgLz59PlxyXG4gICAgICAgIDxSb3V0ZSBwYXRoPVwiL3JlcXVlc3RcIiBlbGVtZW50PXt1c2VyID8gPE5hdmlnYXRlIHRvPVwiL2Rhc2hib2FyZFwiIHJlcGxhY2UgLz4gOiA8VGlja2V0Rm9ybSBwdWJsaWNNb2RlIC8+fSAvPlxyXG4gICAgICA8L1JvdXRlPlxyXG4gICAgICA8Um91dGVcclxuICAgICAgICBwYXRoPVwiL1wiXHJcbiAgICAgICAgZWxlbWVudD17XHJcbiAgICAgICAgICA8UHJvdGVjdGVkPjxMYXlvdXQgLz48L1Byb3RlY3RlZD5cclxuICAgICAgICB9XHJcbiAgICAgID5cclxuICAgICAgICA8Um91dGUgcGF0aD1cImRhc2hib2FyZFwiIGVsZW1lbnQ9ezxEYXNoYm9hcmQgLz59IC8+XHJcbiAgICAgICAgPFJvdXRlIHBhdGg9XCJ0aWNrZXRzXCIgZWxlbWVudD17PFRpY2tldHMgLz59IC8+XHJcbiAgICAgICAgPFJvdXRlIHBhdGg9XCJ0aWNrZXRzL25ld1wiIGVsZW1lbnQ9ezxUaWNrZXRGb3JtIC8+fSAvPlxyXG4gICAgICAgIDxSb3V0ZSBwYXRoPVwidGlja2V0cy9tdWx0aXBsZS1kYXRlc1wiIGVsZW1lbnQ9ezxNdWx0aXBsZURhdGVUcmlwcyAvPn0gLz5cclxuICAgICAgICA8Um91dGUgcGF0aD1cInRpY2tldHMvOmlkXCIgZWxlbWVudD17PFRpY2tldERldGFpbCAvPn0gLz5cclxuICAgICAgICA8Um91dGUgcGF0aD1cInRpY2tldHMvOmlkL3ByZXZpZXdcIiBlbGVtZW50PXs8VGlja2V0UHJldmlldyAvPn0gLz5cclxuICAgICAgICA8Um91dGUgcGF0aD1cInRpY2tldHMvOmlkL2VkaXRcIiBlbGVtZW50PXs8VGlja2V0Rm9ybSAvPn0gLz5cclxuICAgICAgICA8Um91dGUgcGF0aD1cInZlaGljbGVzXCIgZWxlbWVudD17PFByb3RlY3RlZCByb2xlcz17WydhZG1pbicsICdhZG1pbl9vZmZpY2VyJ119PjxWZWhpY2xlcyAvPjwvUHJvdGVjdGVkPn0gLz5cclxuICAgICAgICA8Um91dGUgcGF0aD1cInVzZXJzXCIgZWxlbWVudD17PFByb3RlY3RlZCByb2xlcz17WydhZG1pbiddfT48VXNlcnMgLz48L1Byb3RlY3RlZD59IC8+XHJcbiAgICAgICAgPFJvdXRlIHBhdGg9XCJyZXBvcnRzXCIgZWxlbWVudD17PFByb3RlY3RlZCByb2xlcz17WydhZG1pbicsICdhZG1pbl9vZmZpY2VyJ119PjxSZXBvcnRzIC8+PC9Qcm90ZWN0ZWQ+fSAvPlxyXG4gICAgICA8L1JvdXRlPlxyXG4gICAgICA8Um91dGUgcGF0aD1cIipcIiBlbGVtZW50PXs8TmF2aWdhdGUgdG89XCIvXCIgcmVwbGFjZSAvPn0gLz5cclxuICAgIDwvUm91dGVzPjwvPlxyXG4gICk7XHJcbn1cclxuIl0sImZpbGUiOiJDOi9Vc2Vycy9Mb2NhbHVzZXIvRG93bmxvYWRzL0NIRUQtVHJpcC1UaWNrZXQtTWFuYWdlbWVudC1TeXN0ZW0vdHJpcC10aWNrZXQtbWFuYWdlbWVudC1zeXN0ZW0vY2xpZW50L3NyYy9BcHAuanN4In0=

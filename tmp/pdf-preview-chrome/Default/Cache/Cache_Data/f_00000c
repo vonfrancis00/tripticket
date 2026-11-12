@@ -1,0 +1,479 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/pages/MultipleDateTrips.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=43d30801"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+let prevRefreshReg;
+let prevRefreshSig;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  prevRefreshReg = window.$RefreshReg$;
+  prevRefreshSig = window.$RefreshSig$;
+  window.$RefreshReg$ = RefreshRuntime.getRefreshReg("C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx");
+  window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
+}
+var _s = $RefreshSig$();
+import __vite__cjsImport3_react from "/node_modules/.vite/deps/react.js?v=43d30801"; const useEffect = __vite__cjsImport3_react["useEffect"]; const useRef = __vite__cjsImport3_react["useRef"]; const useState = __vite__cjsImport3_react["useState"];
+import { Plus, Trash2, Save } from "/node_modules/.vite/deps/lucide-react.js?v=43d30801";
+import api from "/src/lib/api.js";
+import TimeInput from "/src/components/TimeInput.jsx";
+const newPoint = (id) => ({ id, from: "", to: "", departureTime: "", arrivalTime: "", departureOdo: "", arrivalOdo: "" });
+const today = () => {
+  const date = /* @__PURE__ */ new Date();
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+};
+export default function MultipleDateTrips() {
+  _s();
+  const [details, setDetails] = useState({ date: today(), driverName: "", vehicleId: "", vehicleName: "", plateNumber: "" });
+  const [drivers, setDrivers] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
+  const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [points, setPoints] = useState(() => [newPoint(1)]);
+  const nextPointId = useRef(2);
+  const savingRef = useRef(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  const [saved, setSaved] = useState(false);
+  const save = async (event) => {
+    event.preventDefault();
+    if (savingRef.current || saved) return;
+    savingRef.current = true;
+    setSaving(true);
+    setSaveError("");
+    try {
+      await api.post("/multiple-date-trips", {
+        ...details,
+        vehicleId: details.vehicleId === "other" ? null : details.vehicleId,
+        points: points.map(({ id, ...point }) => ({
+          ...point,
+          departureOdo: Number(point.departureOdo),
+          arrivalOdo: Number(point.arrivalOdo)
+        }))
+      });
+      setSaved(true);
+    } catch (error) {
+      setSaveError(error.response?.data?.message || "Unable to save trip. Please try again.");
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
+    }
+  };
+  useEffect(() => {
+    let active = true;
+    Promise.allSettled([api.get("/users/drivers"), api.get("/vehicles")]).then(([driverResult, vehicleResult]) => {
+      if (!active) return;
+      const messages = [];
+      if (driverResult.status === "fulfilled") setDrivers(driverResult.value.data.drivers);
+      else
+        messages.push("Unable to load drivers. You can enter the driver name manually.");
+      if (vehicleResult.status === "fulfilled") setVehicles(vehicleResult.value.data.vehicles);
+      else
+        messages.push("Unable to load vehicles. Select Other vehicle to enter the details.");
+      setErrors(messages);
+      setLoading(false);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+  const setDetail = (key, value) => setDetails((previous) => ({ ...previous, [key]: value }));
+  const setPoint = (id, key, value) => setPoints((previous) => previous.map((point) => point.id === id ? { ...point, [key]: value } : point));
+  return /* @__PURE__ */ jsxDEV("div", { className: "stack-lg multiple-date-trips", children: [
+    /* @__PURE__ */ jsxDEV("div", { className: "page-heading", children: /* @__PURE__ */ jsxDEV("div", { children: [
+      /* @__PURE__ */ jsxDEV("h1", { children: "Create Multiple Date Trips" }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+        lineNumber: 91,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV("p", { children: "Enter the travel details, then add each point of the trip." }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+        lineNumber: 92,
+        columnNumber: 11
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+      lineNumber: 90,
+      columnNumber: 9
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+      lineNumber: 89,
+      columnNumber: 7
+    }, this),
+    errors.length > 0 && /* @__PURE__ */ jsxDEV("div", { className: "alert error", role: "alert", children: errors.map((message) => /* @__PURE__ */ jsxDEV("p", { children: message }, message, false, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+      lineNumber: 95,
+      columnNumber: 96
+    }, this)) }, void 0, false, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+      lineNumber: 95,
+      columnNumber: 29
+    }, this),
+    saveError && /* @__PURE__ */ jsxDEV("div", { className: "alert error", role: "alert", children: saveError }, void 0, false, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+      lineNumber: 96,
+      columnNumber: 21
+    }, this),
+    saved && /* @__PURE__ */ jsxDEV("div", { className: "panel", role: "status", children: "Trip saved successfully." }, void 0, false, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+      lineNumber: 97,
+      columnNumber: 17
+    }, this),
+    /* @__PURE__ */ jsxDEV("form", { onSubmit: save, className: "stack-lg", onChange: () => {
+      setSaved(false);
+      setSaveError("");
+    }, children: /* @__PURE__ */ jsxDEV("fieldset", { disabled: saving, className: "multiple-trip-save-fields stack-lg", children: [
+      /* @__PURE__ */ jsxDEV("section", { className: "panel form-panel", "aria-labelledby": "trip-details-heading", children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "form-section-title", children: [
+          /* @__PURE__ */ jsxDEV("span", { children: "01" }, void 0, false, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 102,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("h3", { id: "trip-details-heading", children: "Date & Vehicle Details" }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 103,
+              columnNumber: 16
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { children: "Choose the date, driver, and vehicle being used." }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 103,
+              columnNumber: 77
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 103,
+            columnNumber: 11
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+          lineNumber: 101,
+          columnNumber: 9
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "form-grid", children: [
+          /* @__PURE__ */ jsxDEV("label", { className: "span-2", children: [
+            "Date *",
+            /* @__PURE__ */ jsxDEV("input", { type: "date", required: true, value: details.date, onChange: (event) => setDetail("date", event.target.value) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 107,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 106,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ jsxDEV("label", { children: [
+            "Driver Name *",
+            /* @__PURE__ */ jsxDEV("input", { list: "multiple-trip-drivers", required: true, value: details.driverName, onChange: (event) => setDetail("driverName", event.target.value), placeholder: loading ? "Loading drivers..." : "Select or enter driver name" }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 110,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("datalist", { id: "multiple-trip-drivers", children: drivers.map((driver) => /* @__PURE__ */ jsxDEV("option", { value: driver.name }, driver._id, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 111,
+              columnNumber: 75
+            }, this)) }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 111,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 109,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ jsxDEV("label", { children: [
+            "Vehicle Being Used *",
+            /* @__PURE__ */ jsxDEV("select", { required: true, value: details.vehicleId, onChange: (event) => {
+              const vehicle = vehicles.find((item) => item._id === event.target.value);
+              setDetails((previous) => ({ ...previous, vehicleId: event.target.value, vehicleName: vehicle ? `${vehicle.make} ${vehicle.model}` : "", plateNumber: vehicle?.plateNumber || "" }));
+            }, children: [
+              /* @__PURE__ */ jsxDEV("option", { value: "", children: loading ? "Loading vehicles..." : "Select vehicle" }, void 0, false, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 118,
+                columnNumber: 15
+              }, this),
+              vehicles.map((vehicle) => /* @__PURE__ */ jsxDEV("option", { value: vehicle._id, children: [
+                vehicle.make,
+                " ",
+                vehicle.model,
+                " - ",
+                vehicle.plateNumber
+              ] }, vehicle._id, true, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 119,
+                columnNumber: 42
+              }, this)),
+              /* @__PURE__ */ jsxDEV("option", { value: "other", children: "Other vehicle" }, void 0, false, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 120,
+                columnNumber: 15
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 114,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 113,
+            columnNumber: 11
+          }, this),
+          details.vehicleId === "other" && /* @__PURE__ */ jsxDEV("label", { children: [
+            "Vehicle Name / Model *",
+            /* @__PURE__ */ jsxDEV("input", { required: true, value: details.vehicleName, onChange: (event) => setDetail("vehicleName", event.target.value), placeholder: "Enter vehicle name or model" }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 124,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 123,
+            columnNumber: 45
+          }, this),
+          /* @__PURE__ */ jsxDEV("label", { children: [
+            "Plate Number *",
+            /* @__PURE__ */ jsxDEV("input", { required: true, value: details.plateNumber, onChange: (event) => setDetail("plateNumber", event.target.value), placeholder: "Enter plate number" }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 127,
+              columnNumber: 13
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 126,
+            columnNumber: 11
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+          lineNumber: 105,
+          columnNumber: 9
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+        lineNumber: 100,
+        columnNumber: 7
+      }, this),
+      /* @__PURE__ */ jsxDEV("section", { className: "panel form-panel stack-lg", "aria-labelledby": "trip-points-heading", children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "form-section-title", children: [
+          /* @__PURE__ */ jsxDEV("span", { children: "02" }, void 0, false, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 133,
+            columnNumber: 11
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("h3", { id: "trip-points-heading", children: "Trips" }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 134,
+              columnNumber: 16
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { children: "Add the route, travel times, and odometer readings for each point." }, void 0, false, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 134,
+              columnNumber: 55
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 134,
+            columnNumber: 11
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+          lineNumber: 132,
+          columnNumber: 9
+        }, this),
+        points.map(
+          (point, index) => /* @__PURE__ */ jsxDEV("fieldset", { className: "trip-point", children: [
+            /* @__PURE__ */ jsxDEV("legend", { children: [
+              "Point ",
+              index + 1
+            ] }, void 0, true, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 138,
+              columnNumber: 13
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "form-grid", children: [
+              /* @__PURE__ */ jsxDEV("label", { children: [
+                "From *",
+                /* @__PURE__ */ jsxDEV("input", { required: true, value: point.from, onChange: (event) => setPoint(point.id, "from", event.target.value), placeholder: "Departure location" }, void 0, false, {
+                  fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                  lineNumber: 141,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 140,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("label", { children: [
+                "To *",
+                /* @__PURE__ */ jsxDEV("input", { required: true, value: point.to, onChange: (event) => setPoint(point.id, "to", event.target.value), placeholder: "Arrival location" }, void 0, false, {
+                  fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                  lineNumber: 144,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 143,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("label", { children: [
+                "Departure Time *",
+                /* @__PURE__ */ jsxDEV(TimeInput, { label: `Point ${index + 1} departure time`, required: true, value: point.departureTime, onChange: (value) => setPoint(point.id, "departureTime", value) }, void 0, false, {
+                  fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                  lineNumber: 147,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 146,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("label", { children: [
+                "Arrival Time *",
+                /* @__PURE__ */ jsxDEV(TimeInput, { label: `Point ${index + 1} arrival time`, required: true, value: point.arrivalTime, onChange: (value) => setPoint(point.id, "arrivalTime", value) }, void 0, false, {
+                  fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                  lineNumber: 150,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 149,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("label", { children: [
+                "Departure Odometer (km) *",
+                /* @__PURE__ */ jsxDEV("input", { type: "number", min: "0", step: "any", required: true, value: point.departureOdo, onChange: (event) => setPoint(point.id, "departureOdo", event.target.value), placeholder: "Odometer at departure" }, void 0, false, {
+                  fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                  lineNumber: 153,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 152,
+                columnNumber: 15
+              }, this),
+              /* @__PURE__ */ jsxDEV("label", { children: [
+                "Arrival Odometer (km) *",
+                /* @__PURE__ */ jsxDEV("input", { type: "number", min: point.departureOdo === "" ? 0 : point.departureOdo, step: "any", required: true, value: point.arrivalOdo, onChange: (event) => setPoint(point.id, "arrivalOdo", event.target.value), placeholder: "Odometer at arrival", "aria-describedby": point.arrivalOdo !== "" && point.departureOdo !== "" && Number(point.arrivalOdo) < Number(point.departureOdo) ? `odo-error-${point.id}` : void 0 }, void 0, false, {
+                  fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                  lineNumber: 156,
+                  columnNumber: 17
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 155,
+                columnNumber: 15
+              }, this),
+              point.arrivalOdo !== "" && point.departureOdo !== "" && Number(point.arrivalOdo) < Number(point.departureOdo) && /* @__PURE__ */ jsxDEV("p", { className: "alert error span-2", id: `odo-error-${point.id}`, role: "alert", children: "Arrival odometer must be at least the departure odometer." }, void 0, false, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 158,
+                columnNumber: 129
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 139,
+              columnNumber: 13
+            }, this),
+            points.length > 1 && /* @__PURE__ */ jsxDEV("button", { type: "button", className: "btn secondary trip-point-remove", onClick: () => {
+              setSaved(false);
+              setPoints((previous) => previous.filter((item) => item.id !== point.id));
+            }, "aria-label": `Remove point ${index + 1}`, children: [
+              /* @__PURE__ */ jsxDEV(Trash2, { size: 16 }, void 0, false, {
+                fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+                lineNumber: 160,
+                columnNumber: 250
+              }, this),
+              " Remove Point"
+            ] }, void 0, true, {
+              fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+              lineNumber: 160,
+              columnNumber: 35
+            }, this)
+          ] }, point.id, true, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 137,
+            columnNumber: 13
+          }, this)
+        ),
+        /* @__PURE__ */ jsxDEV("div", { children: /* @__PURE__ */ jsxDEV("button", { type: "button", className: "btn secondary", onClick: () => {
+          setSaved(false);
+          const id = nextPointId.current++;
+          setPoints((previous) => [...previous, newPoint(id)]);
+        }, children: [
+          /* @__PURE__ */ jsxDEV(Plus, { size: 17 }, void 0, false, {
+            fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+            lineNumber: 167,
+            columnNumber: 18
+          }, this),
+          " Add Stop"
+        ] }, void 0, true, {
+          fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+          lineNumber: 163,
+          columnNumber: 14
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+          lineNumber: 163,
+          columnNumber: 9
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+        lineNumber: 131,
+        columnNumber: 7
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "form-actions", children: /* @__PURE__ */ jsxDEV("button", { type: "submit", className: "btn primary", disabled: saving || saved, children: [
+        /* @__PURE__ */ jsxDEV(Save, { size: 17 }, void 0, false, {
+          fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+          lineNumber: 171,
+          columnNumber: 11
+        }, this),
+        " ",
+        saving ? "Saving..." : saved ? "Saved" : "Save Trip"
+      ] }, void 0, true, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+        lineNumber: 170,
+        columnNumber: 9
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+        lineNumber: 169,
+        columnNumber: 7
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+      lineNumber: 99,
+      columnNumber: 7
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+      lineNumber: 98,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx",
+    lineNumber: 88,
+    columnNumber: 5
+  }, this);
+}
+_s(MultipleDateTrips, "GuaWF9WVDpRQf+pqzsygkprYOU4=");
+_c = MultipleDateTrips;
+var _c;
+$RefreshReg$(_c, "MultipleDateTrips");
+if (import.meta.hot && !inWebWorker) {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+if (import.meta.hot && !inWebWorker) {
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/Localuser/Downloads/CHED-Trip-Ticket-Management-System/trip-ticket-management-system/client/src/pages/MultipleDateTrips.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+
+//# sourceMappingURL=data:application/json;base64,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dkJaLG9CQUFVLENBQUNrQyxhQUFhLENBQUMsR0FBR0EsVUFBVW5FLFNBQVNDLEVBQUUsQ0FBQyxDQUFDO0FBQUEsUUFDckQsR0FBRztBQUFBLGlDQUFDLFFBQUssTUFBTSxNQUFaO0FBQUE7QUFBQTtBQUFBO0FBQUEsaUJBQWU7QUFBQSxVQUFHO0FBQUEsYUFKaEI7QUFBQTtBQUFBO0FBQUE7QUFBQSxlQUl5QixLQUo5QjtBQUFBO0FBQUE7QUFBQTtBQUFBLGVBSXVDO0FBQUEsV0FwQ3pDO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUFxQ0E7QUFBQSxNQUNBLHVCQUFDLFNBQUksV0FBVSxnQkFDYixpQ0FBQyxZQUFPLE1BQUssVUFBUyxXQUFVLGVBQWMsVUFBVW1DLFVBQVVJLE9BQ2hFO0FBQUEsK0JBQUMsUUFBSyxNQUFNLE1BQVo7QUFBQTtBQUFBO0FBQUE7QUFBQSxlQUFlO0FBQUEsUUFBRztBQUFBLFFBQUVKLFNBQVMsY0FBY0ksUUFBUSxVQUFVO0FBQUEsV0FEL0Q7QUFBQTtBQUFBO0FBQUE7QUFBQSxhQUVBLEtBSEY7QUFBQTtBQUFBO0FBQUE7QUFBQSxhQUlBO0FBQUEsU0ExRUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQTJFQSxLQTVFQTtBQUFBO0FBQUE7QUFBQTtBQUFBLFdBNkVBO0FBQUEsT0F2RkY7QUFBQTtBQUFBO0FBQUE7QUFBQSxTQXdGQTtBQUVKO0FBQUN2QixHQW5KdUJELG1CQUFpQjtBQUFBLEtBQWpCQTtBQUFpQixJQUFBa0U7QUFBQSxhQUFBQSxJQUFBIiwibmFtZXMiOlsidXNlRWZmZWN0IiwidXNlUmVmIiwidXNlU3RhdGUiLCJQbHVzIiwiVHJhc2gyIiwiU2F2ZSIsImFwaSIsIlRpbWVJbnB1dCIsIm5ld1BvaW50IiwiaWQiLCJmcm9tIiwidG8iLCJkZXBhcnR1cmVUaW1lIiwiYXJyaXZhbFRpbWUiLCJkZXBhcnR1cmVPZG8iLCJhcnJpdmFsT2RvIiwidG9kYXkiLCJkYXRlIiwiRGF0ZSIsImdldEZ1bGxZZWFyIiwiU3RyaW5nIiwiZ2V0TW9udGgiLCJwYWRTdGFydCIsImdldERhdGUiLCJNdWx0aXBsZURhdGVUcmlwcyIsIl9zIiwiZGV0YWlscyIsInNldERldGFpbHMiLCJkcml2ZXJOYW1lIiwidmVoaWNsZUlkIiwidmVoaWNsZU5hbWUiLCJwbGF0ZU51bWJlciIsImRyaXZlcnMiLCJzZXREcml2ZXJzIiwidmVoaWNsZXMiLCJzZXRWZWhpY2xlcyIsImVycm9ycyIsInNldEVycm9ycyIsImxvYWRpbmciLCJzZXRMb2FkaW5nIiwicG9pbnRzIiwic2V0UG9pbnRzIiwibmV4dFBvaW50SWQiLCJzYXZpbmdSZWYiLCJzYXZpbmciLCJzZXRTYXZpbmciLCJzYXZlRXJyb3IiLCJzZXRTYXZlRXJyb3IiLCJzYXZlZCIsInNldFNhdmVkIiwic2F2ZSIsImV2ZW50IiwicHJldmVudERlZmF1bHQiLCJjdXJyZW50IiwicG9zdCIsIm1hcCIsInBvaW50IiwiTnVtYmVyIiwiZXJyb3IiLCJyZXNwb25zZSIsImRhdGEiLCJtZXNzYWdlIiwiYWN0aXZlIiwiUHJvbWlzZSIsImFsbFNldHRsZWQiLCJnZXQiLCJ0aGVuIiwiZHJpdmVyUmVzdWx0IiwidmVoaWNsZVJlc3VsdCIsIm1lc3NhZ2VzIiwic3RhdHVzIiwidmFsdWUiLCJwdXNoIiwic2V0RGV0YWlsIiwia2V5IiwicHJldmlvdXMiLCJzZXRQb2ludCIsImxlbmd0aCIsInRhcmdldCIsImRyaXZlciIsIm5hbWUiLCJfaWQiLCJ2ZWhpY2xlIiwiZmluZCIsIml0ZW0iLCJtYWtlIiwibW9kZWwiLCJpbmRleCIsInVuZGVmaW5lZCIsImZpbHRlciIsIl9jIl0sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VzIjpbIk11bHRpcGxlRGF0ZVRyaXBzLmpzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyB1c2VFZmZlY3QsIHVzZVJlZiwgdXNlU3RhdGUgfSBmcm9tICdyZWFjdCc7XHJcbmltcG9ydCB7IFBsdXMsIFRyYXNoMiwgU2F2ZSB9IGZyb20gJ2x1Y2lkZS1yZWFjdCc7XHJcbmltcG9ydCBhcGkgZnJvbSAnLi4vbGliL2FwaSc7XHJcbmltcG9ydCBUaW1lSW5wdXQgZnJvbSAnLi4vY29tcG9uZW50cy9UaW1lSW5wdXQnO1xyXG5cclxuY29uc3QgbmV3UG9pbnQgPSAoaWQpID0+ICh7IGlkLCBmcm9tOiAnJywgdG86ICcnLCBkZXBhcnR1cmVUaW1lOiAnJywgYXJyaXZhbFRpbWU6ICcnLCBkZXBhcnR1cmVPZG86ICcnLCBhcnJpdmFsT2RvOiAnJyB9KTtcclxuY29uc3QgdG9kYXkgPSAoKSA9PiB7XHJcbiAgY29uc3QgZGF0ZSA9IG5ldyBEYXRlKCk7XHJcbiAgcmV0dXJuIGAke2RhdGUuZ2V0RnVsbFllYXIoKX0tJHtTdHJpbmcoZGF0ZS5nZXRNb250aCgpICsgMSkucGFkU3RhcnQoMiwgJzAnKX0tJHtTdHJpbmcoZGF0ZS5nZXREYXRlKCkpLnBhZFN0YXJ0KDIsICcwJyl9YDtcclxufTtcclxuXHJcbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIE11bHRpcGxlRGF0ZVRyaXBzKCkge1xyXG4gIGNvbnN0IFtkZXRhaWxzLCBzZXREZXRhaWxzXSA9IHVzZVN0YXRlKHsgZGF0ZTogdG9kYXkoKSwgZHJpdmVyTmFtZTogJycsIHZlaGljbGVJZDogJycsIHZlaGljbGVOYW1lOiAnJywgcGxhdGVOdW1iZXI6ICcnIH0pO1xyXG4gIGNvbnN0IFtkcml2ZXJzLCBzZXREcml2ZXJzXSA9IHVzZVN0YXRlKFtdKTtcclxuICBjb25zdCBbdmVoaWNsZXMsIHNldFZlaGljbGVzXSA9IHVzZVN0YXRlKFtdKTtcclxuICBjb25zdCBbZXJyb3JzLCBzZXRFcnJvcnNdID0gdXNlU3RhdGUoW10pO1xyXG4gIGNvbnN0IFtsb2FkaW5nLCBzZXRMb2FkaW5nXSA9IHVzZVN0YXRlKHRydWUpO1xyXG4gIGNvbnN0IFtwb2ludHMsIHNldFBvaW50c10gPSB1c2VTdGF0ZSgoKSA9PiBbbmV3UG9pbnQoMSldKTtcclxuICBjb25zdCBuZXh0UG9pbnRJZCA9IHVzZVJlZigyKTtcclxuICBjb25zdCBzYXZpbmdSZWYgPSB1c2VSZWYoZmFsc2UpO1xyXG4gIGNvbnN0IFtzYXZpbmcsIHNldFNhdmluZ10gPSB1c2VTdGF0ZShmYWxzZSk7XHJcbiAgY29uc3QgW3NhdmVFcnJvciwgc2V0U2F2ZUVycm9yXSA9IHVzZVN0YXRlKCcnKTtcclxuICBjb25zdCBbc2F2ZWQsIHNldFNhdmVkXSA9IHVzZVN0YXRlKGZhbHNlKTtcclxuXHJcbiAgY29uc3Qgc2F2ZSA9IGFzeW5jIChldmVudCkgPT4ge1xyXG4gICAgZXZlbnQucHJldmVudERlZmF1bHQoKTtcclxuICAgIGlmIChzYXZpbmdSZWYuY3VycmVudCB8fCBzYXZlZCkgcmV0dXJuO1xyXG4gICAgc2F2aW5nUmVmLmN1cnJlbnQgPSB0cnVlO1xyXG4gICAgc2V0U2F2aW5nKHRydWUpO1xyXG4gICAgc2V0U2F2ZUVycm9yKCcnKTtcclxuICAgIHRyeSB7XHJcbiAgICAgIGF3YWl0IGFwaS5wb3N0KCcvbXVsdGlwbGUtZGF0ZS10cmlwcycsIHtcclxuICAgICAgICAuLi5kZXRhaWxzLFxyXG4gICAgICAgIHZlaGljbGVJZDogZGV0YWlscy52ZWhpY2xlSWQgPT09ICdvdGhlcicgPyBudWxsIDogZGV0YWlscy52ZWhpY2xlSWQsXHJcbiAgICAgICAgcG9pbnRzOiBwb2ludHMubWFwKCh7IGlkLCAuLi5wb2ludCB9KSA9PiAoe1xyXG4gICAgICAgICAgLi4ucG9pbnQsXHJcbiAgICAgICAgICBkZXBhcnR1cmVPZG86IE51bWJlcihwb2ludC5kZXBhcnR1cmVPZG8pLFxyXG4gICAgICAgICAgYXJyaXZhbE9kbzogTnVtYmVyKHBvaW50LmFycml2YWxPZG8pLFxyXG4gICAgICAgIH0pKSxcclxuICAgICAgfSk7XHJcbiAgICAgIHNldFNhdmVkKHRydWUpO1xyXG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcclxuICAgICAgc2V0U2F2ZUVycm9yKGVycm9yLnJlc3BvbnNlPy5kYXRhPy5tZXNzYWdlIHx8ICdVbmFibGUgdG8gc2F2ZSB0cmlwLiBQbGVhc2UgdHJ5IGFnYWluLicpO1xyXG4gICAgfSBmaW5hbGx5IHtcclxuICAgICAgc2F2aW5nUmVmLmN1cnJlbnQgPSBmYWxzZTtcclxuICAgICAgc2V0U2F2aW5nKGZhbHNlKTtcclxuICAgIH1cclxuICB9O1xyXG5cclxuICB1c2VFZmZlY3QoKCkgPT4ge1xyXG4gICAgbGV0IGFjdGl2ZSA9IHRydWU7XHJcbiAgICBQcm9taXNlLmFsbFNldHRsZWQoW2FwaS5nZXQoJy91c2Vycy9kcml2ZXJzJyksIGFwaS5nZXQoJy92ZWhpY2xlcycpXSkudGhlbigoW2RyaXZlclJlc3VsdCwgdmVoaWNsZVJlc3VsdF0pID0+IHtcclxuICAgICAgaWYgKCFhY3RpdmUpIHJldHVybjtcclxuICAgICAgY29uc3QgbWVzc2FnZXMgPSBbXTtcclxuICAgICAgaWYgKGRyaXZlclJlc3VsdC5zdGF0dXMgPT09ICdmdWxmaWxsZWQnKSBzZXREcml2ZXJzKGRyaXZlclJlc3VsdC52YWx1ZS5kYXRhLmRyaXZlcnMpO1xyXG4gICAgICBlbHNlIG1lc3NhZ2VzLnB1c2goJ1VuYWJsZSB0byBsb2FkIGRyaXZlcnMuIFlvdSBjYW4gZW50ZXIgdGhlIGRyaXZlciBuYW1lIG1hbnVhbGx5LicpO1xyXG4gICAgICBpZiAodmVoaWNsZVJlc3VsdC5zdGF0dXMgPT09ICdmdWxmaWxsZWQnKSBzZXRWZWhpY2xlcyh2ZWhpY2xlUmVzdWx0LnZhbHVlLmRhdGEudmVoaWNsZXMpO1xyXG4gICAgICBlbHNlIG1lc3NhZ2VzLnB1c2goJ1VuYWJsZSB0byBsb2FkIHZlaGljbGVzLiBTZWxlY3QgT3RoZXIgdmVoaWNsZSB0byBlbnRlciB0aGUgZGV0YWlscy4nKTtcclxuICAgICAgc2V0RXJyb3JzKG1lc3NhZ2VzKTtcclxuICAgICAgc2V0TG9hZGluZyhmYWxzZSk7XHJcbiAgICB9KTtcclxuICAgIHJldHVybiAoKSA9PiB7IGFjdGl2ZSA9IGZhbHNlOyB9O1xyXG4gIH0sIFtdKTtcclxuXHJcbiAgY29uc3Qgc2V0RGV0YWlsID0gKGtleSwgdmFsdWUpID0+IHNldERldGFpbHMoKHByZXZpb3VzKSA9PiAoeyAuLi5wcmV2aW91cywgW2tleV06IHZhbHVlIH0pKTtcclxuICBjb25zdCBzZXRQb2ludCA9IChpZCwga2V5LCB2YWx1ZSkgPT4gc2V0UG9pbnRzKChwcmV2aW91cykgPT4gcHJldmlvdXMubWFwKChwb2ludCkgPT4gcG9pbnQuaWQgPT09IGlkID8geyAuLi5wb2ludCwgW2tleV06IHZhbHVlIH0gOiBwb2ludCkpO1xyXG5cclxuICByZXR1cm4gKFxyXG4gICAgPGRpdiBjbGFzc05hbWU9XCJzdGFjay1sZyBtdWx0aXBsZS1kYXRlLXRyaXBzXCI+XHJcbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwicGFnZS1oZWFkaW5nXCI+XHJcbiAgICAgICAgPGRpdj5cclxuICAgICAgICAgIDxoMT5DcmVhdGUgTXVsdGlwbGUgRGF0ZSBUcmlwczwvaDE+XHJcbiAgICAgICAgICA8cD5FbnRlciB0aGUgdHJhdmVsIGRldGFpbHMsIHRoZW4gYWRkIGVhY2ggcG9pbnQgb2YgdGhlIHRyaXAuPC9wPlxyXG4gICAgICAgIDwvZGl2PlxyXG4gICAgICA8L2Rpdj5cclxuICAgICAge2Vycm9ycy5sZW5ndGggPiAwICYmIDxkaXYgY2xhc3NOYW1lPVwiYWxlcnQgZXJyb3JcIiByb2xlPVwiYWxlcnRcIj57ZXJyb3JzLm1hcCgobWVzc2FnZSkgPT4gPHAga2V5PXttZXNzYWdlfT57bWVzc2FnZX08L3A+KX08L2Rpdj59XHJcbiAgICAgIHtzYXZlRXJyb3IgJiYgPGRpdiBjbGFzc05hbWU9XCJhbGVydCBlcnJvclwiIHJvbGU9XCJhbGVydFwiPntzYXZlRXJyb3J9PC9kaXY+fVxyXG4gICAgICB7c2F2ZWQgJiYgPGRpdiBjbGFzc05hbWU9XCJwYW5lbFwiIHJvbGU9XCJzdGF0dXNcIj5UcmlwIHNhdmVkIHN1Y2Nlc3NmdWxseS48L2Rpdj59XHJcbiAgICAgIDxmb3JtIG9uU3VibWl0PXtzYXZlfSBjbGFzc05hbWU9XCJzdGFjay1sZ1wiIG9uQ2hhbmdlPXsoKSA9PiB7IHNldFNhdmVkKGZhbHNlKTsgc2V0U2F2ZUVycm9yKCcnKTsgfX0+XHJcbiAgICAgIDxmaWVsZHNldCBkaXNhYmxlZD17c2F2aW5nfSBjbGFzc05hbWU9XCJtdWx0aXBsZS10cmlwLXNhdmUtZmllbGRzIHN0YWNrLWxnXCI+XHJcbiAgICAgIDxzZWN0aW9uIGNsYXNzTmFtZT1cInBhbmVsIGZvcm0tcGFuZWxcIiBhcmlhLWxhYmVsbGVkYnk9XCJ0cmlwLWRldGFpbHMtaGVhZGluZ1wiPlxyXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZm9ybS1zZWN0aW9uLXRpdGxlXCI+XHJcbiAgICAgICAgICA8c3Bhbj4wMTwvc3Bhbj5cclxuICAgICAgICAgIDxkaXY+PGgzIGlkPVwidHJpcC1kZXRhaWxzLWhlYWRpbmdcIj5EYXRlICZhbXA7IFZlaGljbGUgRGV0YWlsczwvaDM+PHA+Q2hvb3NlIHRoZSBkYXRlLCBkcml2ZXIsIGFuZCB2ZWhpY2xlIGJlaW5nIHVzZWQuPC9wPjwvZGl2PlxyXG4gICAgICAgIDwvZGl2PlxyXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZm9ybS1ncmlkXCI+XHJcbiAgICAgICAgICA8bGFiZWwgY2xhc3NOYW1lPVwic3Bhbi0yXCI+RGF0ZSAqXHJcbiAgICAgICAgICAgIDxpbnB1dCB0eXBlPVwiZGF0ZVwiIHJlcXVpcmVkIHZhbHVlPXtkZXRhaWxzLmRhdGV9IG9uQ2hhbmdlPXsoZXZlbnQpID0+IHNldERldGFpbCgnZGF0ZScsIGV2ZW50LnRhcmdldC52YWx1ZSl9IC8+XHJcbiAgICAgICAgICA8L2xhYmVsPlxyXG4gICAgICAgICAgPGxhYmVsPkRyaXZlciBOYW1lICpcclxuICAgICAgICAgICAgPGlucHV0IGxpc3Q9XCJtdWx0aXBsZS10cmlwLWRyaXZlcnNcIiByZXF1aXJlZCB2YWx1ZT17ZGV0YWlscy5kcml2ZXJOYW1lfSBvbkNoYW5nZT17KGV2ZW50KSA9PiBzZXREZXRhaWwoJ2RyaXZlck5hbWUnLCBldmVudC50YXJnZXQudmFsdWUpfSBwbGFjZWhvbGRlcj17bG9hZGluZyA/ICdMb2FkaW5nIGRyaXZlcnMuLi4nIDogJ1NlbGVjdCBvciBlbnRlciBkcml2ZXIgbmFtZSd9IC8+XHJcbiAgICAgICAgICAgIDxkYXRhbGlzdCBpZD1cIm11bHRpcGxlLXRyaXAtZHJpdmVyc1wiPntkcml2ZXJzLm1hcCgoZHJpdmVyKSA9PiA8b3B0aW9uIGtleT17ZHJpdmVyLl9pZH0gdmFsdWU9e2RyaXZlci5uYW1lfSAvPil9PC9kYXRhbGlzdD5cclxuICAgICAgICAgIDwvbGFiZWw+XHJcbiAgICAgICAgICA8bGFiZWw+VmVoaWNsZSBCZWluZyBVc2VkICpcclxuICAgICAgICAgICAgPHNlbGVjdCByZXF1aXJlZCB2YWx1ZT17ZGV0YWlscy52ZWhpY2xlSWR9IG9uQ2hhbmdlPXsoZXZlbnQpID0+IHtcclxuICAgICAgICAgICAgICBjb25zdCB2ZWhpY2xlID0gdmVoaWNsZXMuZmluZCgoaXRlbSkgPT4gaXRlbS5faWQgPT09IGV2ZW50LnRhcmdldC52YWx1ZSk7XHJcbiAgICAgICAgICAgICAgc2V0RGV0YWlscygocHJldmlvdXMpID0+ICh7IC4uLnByZXZpb3VzLCB2ZWhpY2xlSWQ6IGV2ZW50LnRhcmdldC52YWx1ZSwgdmVoaWNsZU5hbWU6IHZlaGljbGUgPyBgJHt2ZWhpY2xlLm1ha2V9ICR7dmVoaWNsZS5tb2RlbH1gIDogJycsIHBsYXRlTnVtYmVyOiB2ZWhpY2xlPy5wbGF0ZU51bWJlciB8fCAnJyB9KSk7XHJcbiAgICAgICAgICAgIH19PlxyXG4gICAgICAgICAgICAgIDxvcHRpb24gdmFsdWU9XCJcIj57bG9hZGluZyA/ICdMb2FkaW5nIHZlaGljbGVzLi4uJyA6ICdTZWxlY3QgdmVoaWNsZSd9PC9vcHRpb24+XHJcbiAgICAgICAgICAgICAge3ZlaGljbGVzLm1hcCgodmVoaWNsZSkgPT4gPG9wdGlvbiBrZXk9e3ZlaGljbGUuX2lkfSB2YWx1ZT17dmVoaWNsZS5faWR9Pnt2ZWhpY2xlLm1ha2V9IHt2ZWhpY2xlLm1vZGVsfSAtIHt2ZWhpY2xlLnBsYXRlTnVtYmVyfTwvb3B0aW9uPil9XHJcbiAgICAgICAgICAgICAgPG9wdGlvbiB2YWx1ZT1cIm90aGVyXCI+T3RoZXIgdmVoaWNsZTwvb3B0aW9uPlxyXG4gICAgICAgICAgICA8L3NlbGVjdD5cclxuICAgICAgICAgIDwvbGFiZWw+XHJcbiAgICAgICAgICB7ZGV0YWlscy52ZWhpY2xlSWQgPT09ICdvdGhlcicgJiYgPGxhYmVsPlZlaGljbGUgTmFtZSAvIE1vZGVsICpcclxuICAgICAgICAgICAgPGlucHV0IHJlcXVpcmVkIHZhbHVlPXtkZXRhaWxzLnZlaGljbGVOYW1lfSBvbkNoYW5nZT17KGV2ZW50KSA9PiBzZXREZXRhaWwoJ3ZlaGljbGVOYW1lJywgZXZlbnQudGFyZ2V0LnZhbHVlKX0gcGxhY2Vob2xkZXI9XCJFbnRlciB2ZWhpY2xlIG5hbWUgb3IgbW9kZWxcIiAvPlxyXG4gICAgICAgICAgPC9sYWJlbD59XHJcbiAgICAgICAgICA8bGFiZWw+UGxhdGUgTnVtYmVyICpcclxuICAgICAgICAgICAgPGlucHV0IHJlcXVpcmVkIHZhbHVlPXtkZXRhaWxzLnBsYXRlTnVtYmVyfSBvbkNoYW5nZT17KGV2ZW50KSA9PiBzZXREZXRhaWwoJ3BsYXRlTnVtYmVyJywgZXZlbnQudGFyZ2V0LnZhbHVlKX0gcGxhY2Vob2xkZXI9XCJFbnRlciBwbGF0ZSBudW1iZXJcIiAvPlxyXG4gICAgICAgICAgPC9sYWJlbD5cclxuICAgICAgICA8L2Rpdj5cclxuICAgICAgPC9zZWN0aW9uPlxyXG4gICAgICA8c2VjdGlvbiBjbGFzc05hbWU9XCJwYW5lbCBmb3JtLXBhbmVsIHN0YWNrLWxnXCIgYXJpYS1sYWJlbGxlZGJ5PVwidHJpcC1wb2ludHMtaGVhZGluZ1wiPlxyXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZm9ybS1zZWN0aW9uLXRpdGxlXCI+XHJcbiAgICAgICAgICA8c3Bhbj4wMjwvc3Bhbj5cclxuICAgICAgICAgIDxkaXY+PGgzIGlkPVwidHJpcC1wb2ludHMtaGVhZGluZ1wiPlRyaXBzPC9oMz48cD5BZGQgdGhlIHJvdXRlLCB0cmF2ZWwgdGltZXMsIGFuZCBvZG9tZXRlciByZWFkaW5ncyBmb3IgZWFjaCBwb2ludC48L3A+PC9kaXY+XHJcbiAgICAgICAgPC9kaXY+XHJcbiAgICAgICAge3BvaW50cy5tYXAoKHBvaW50LCBpbmRleCkgPT4gKFxyXG4gICAgICAgICAgPGZpZWxkc2V0IGNsYXNzTmFtZT1cInRyaXAtcG9pbnRcIiBrZXk9e3BvaW50LmlkfT5cclxuICAgICAgICAgICAgPGxlZ2VuZD5Qb2ludCB7aW5kZXggKyAxfTwvbGVnZW5kPlxyXG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZvcm0tZ3JpZFwiPlxyXG4gICAgICAgICAgICAgIDxsYWJlbD5Gcm9tICpcclxuICAgICAgICAgICAgICAgIDxpbnB1dCByZXF1aXJlZCB2YWx1ZT17cG9pbnQuZnJvbX0gb25DaGFuZ2U9eyhldmVudCkgPT4gc2V0UG9pbnQocG9pbnQuaWQsICdmcm9tJywgZXZlbnQudGFyZ2V0LnZhbHVlKX0gcGxhY2Vob2xkZXI9XCJEZXBhcnR1cmUgbG9jYXRpb25cIiAvPlxyXG4gICAgICAgICAgICAgIDwvbGFiZWw+XHJcbiAgICAgICAgICAgICAgPGxhYmVsPlRvICpcclxuICAgICAgICAgICAgICAgIDxpbnB1dCByZXF1aXJlZCB2YWx1ZT17cG9pbnQudG99IG9uQ2hhbmdlPXsoZXZlbnQpID0+IHNldFBvaW50KHBvaW50LmlkLCAndG8nLCBldmVudC50YXJnZXQudmFsdWUpfSBwbGFjZWhvbGRlcj1cIkFycml2YWwgbG9jYXRpb25cIiAvPlxyXG4gICAgICAgICAgICAgIDwvbGFiZWw+XHJcbiAgICAgICAgICAgICAgPGxhYmVsPkRlcGFydHVyZSBUaW1lICpcclxuICAgICAgICAgICAgICAgIDxUaW1lSW5wdXQgbGFiZWw9e2BQb2ludCAke2luZGV4ICsgMX0gZGVwYXJ0dXJlIHRpbWVgfSByZXF1aXJlZCB2YWx1ZT17cG9pbnQuZGVwYXJ0dXJlVGltZX0gb25DaGFuZ2U9eyh2YWx1ZSkgPT4gc2V0UG9pbnQocG9pbnQuaWQsICdkZXBhcnR1cmVUaW1lJywgdmFsdWUpfSAvPlxyXG4gICAgICAgICAgICAgIDwvbGFiZWw+XHJcbiAgICAgICAgICAgICAgPGxhYmVsPkFycml2YWwgVGltZSAqXHJcbiAgICAgICAgICAgICAgICA8VGltZUlucHV0IGxhYmVsPXtgUG9pbnQgJHtpbmRleCArIDF9IGFycml2YWwgdGltZWB9IHJlcXVpcmVkIHZhbHVlPXtwb2ludC5hcnJpdmFsVGltZX0gb25DaGFuZ2U9eyh2YWx1ZSkgPT4gc2V0UG9pbnQocG9pbnQuaWQsICdhcnJpdmFsVGltZScsIHZhbHVlKX0gLz5cclxuICAgICAgICAgICAgICA8L2xhYmVsPlxyXG4gICAgICAgICAgICAgIDxsYWJlbD5EZXBhcnR1cmUgT2RvbWV0ZXIgKGttKSAqXHJcbiAgICAgICAgICAgICAgICA8aW5wdXQgdHlwZT1cIm51bWJlclwiIG1pbj1cIjBcIiBzdGVwPVwiYW55XCIgcmVxdWlyZWQgdmFsdWU9e3BvaW50LmRlcGFydHVyZU9kb30gb25DaGFuZ2U9eyhldmVudCkgPT4gc2V0UG9pbnQocG9pbnQuaWQsICdkZXBhcnR1cmVPZG8nLCBldmVudC50YXJnZXQudmFsdWUpfSBwbGFjZWhvbGRlcj1cIk9kb21ldGVyIGF0IGRlcGFydHVyZVwiIC8+XHJcbiAgICAgICAgICAgICAgPC9sYWJlbD5cclxuICAgICAgICAgICAgICA8bGFiZWw+QXJyaXZhbCBPZG9tZXRlciAoa20pICpcclxuICAgICAgICAgICAgICAgIDxpbnB1dCB0eXBlPVwibnVtYmVyXCIgbWluPXtwb2ludC5kZXBhcnR1cmVPZG8gPT09ICcnID8gMCA6IHBvaW50LmRlcGFydHVyZU9kb30gc3RlcD1cImFueVwiIHJlcXVpcmVkIHZhbHVlPXtwb2ludC5hcnJpdmFsT2RvfSBvbkNoYW5nZT17KGV2ZW50KSA9PiBzZXRQb2ludChwb2ludC5pZCwgJ2Fycml2YWxPZG8nLCBldmVudC50YXJnZXQudmFsdWUpfSBwbGFjZWhvbGRlcj1cIk9kb21ldGVyIGF0IGFycml2YWxcIiBhcmlhLWRlc2NyaWJlZGJ5PXtwb2ludC5hcnJpdmFsT2RvICE9PSAnJyAmJiBwb2ludC5kZXBhcnR1cmVPZG8gIT09ICcnICYmIE51bWJlcihwb2ludC5hcnJpdmFsT2RvKSA8IE51bWJlcihwb2ludC5kZXBhcnR1cmVPZG8pID8gYG9kby1lcnJvci0ke3BvaW50LmlkfWAgOiB1bmRlZmluZWR9IC8+XHJcbiAgICAgICAgICAgICAgPC9sYWJlbD5cclxuICAgICAgICAgICAgICB7cG9pbnQuYXJyaXZhbE9kbyAhPT0gJycgJiYgcG9pbnQuZGVwYXJ0dXJlT2RvICE9PSAnJyAmJiBOdW1iZXIocG9pbnQuYXJyaXZhbE9kbykgPCBOdW1iZXIocG9pbnQuZGVwYXJ0dXJlT2RvKSAmJiA8cCBjbGFzc05hbWU9XCJhbGVydCBlcnJvciBzcGFuLTJcIiBpZD17YG9kby1lcnJvci0ke3BvaW50LmlkfWB9IHJvbGU9XCJhbGVydFwiPkFycml2YWwgb2RvbWV0ZXIgbXVzdCBiZSBhdCBsZWFzdCB0aGUgZGVwYXJ0dXJlIG9kb21ldGVyLjwvcD59XHJcbiAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICB7cG9pbnRzLmxlbmd0aCA+IDEgJiYgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3NOYW1lPVwiYnRuIHNlY29uZGFyeSB0cmlwLXBvaW50LXJlbW92ZVwiIG9uQ2xpY2s9eygpID0+IHsgc2V0U2F2ZWQoZmFsc2UpOyBzZXRQb2ludHMoKHByZXZpb3VzKSA9PiBwcmV2aW91cy5maWx0ZXIoKGl0ZW0pID0+IGl0ZW0uaWQgIT09IHBvaW50LmlkKSk7IH19IGFyaWEtbGFiZWw9e2BSZW1vdmUgcG9pbnQgJHtpbmRleCArIDF9YH0+PFRyYXNoMiBzaXplPXsxNn0gLz4gUmVtb3ZlIFBvaW50PC9idXR0b24+fVxyXG4gICAgICAgICAgPC9maWVsZHNldD5cclxuICAgICAgICApKX1cclxuICAgICAgICA8ZGl2PjxidXR0b24gdHlwZT1cImJ1dHRvblwiIGNsYXNzTmFtZT1cImJ0biBzZWNvbmRhcnlcIiBvbkNsaWNrPXsoKSA9PiB7XHJcbiAgICAgICAgICBzZXRTYXZlZChmYWxzZSk7XHJcbiAgICAgICAgICBjb25zdCBpZCA9IG5leHRQb2ludElkLmN1cnJlbnQrKztcclxuICAgICAgICAgIHNldFBvaW50cygocHJldmlvdXMpID0+IFsuLi5wcmV2aW91cywgbmV3UG9pbnQoaWQpXSk7XHJcbiAgICAgICAgfX0+PFBsdXMgc2l6ZT17MTd9IC8+IEFkZCBTdG9wPC9idXR0b24+PC9kaXY+XHJcbiAgICAgIDwvc2VjdGlvbj5cclxuICAgICAgPGRpdiBjbGFzc05hbWU9XCJmb3JtLWFjdGlvbnNcIj5cclxuICAgICAgICA8YnV0dG9uIHR5cGU9XCJzdWJtaXRcIiBjbGFzc05hbWU9XCJidG4gcHJpbWFyeVwiIGRpc2FibGVkPXtzYXZpbmcgfHwgc2F2ZWR9PlxyXG4gICAgICAgICAgPFNhdmUgc2l6ZT17MTd9IC8+IHtzYXZpbmcgPyAnU2F2aW5nLi4uJyA6IHNhdmVkID8gJ1NhdmVkJyA6ICdTYXZlIFRyaXAnfVxyXG4gICAgICAgIDwvYnV0dG9uPlxyXG4gICAgICA8L2Rpdj5cclxuICAgICAgPC9maWVsZHNldD5cclxuICAgICAgPC9mb3JtPlxyXG4gICAgPC9kaXY+XHJcbiAgKTtcclxufVxyXG4iXSwiZmlsZSI6IkM6L1VzZXJzL0xvY2FsdXNlci9Eb3dubG9hZHMvQ0hFRC1UcmlwLVRpY2tldC1NYW5hZ2VtZW50LVN5c3RlbS90cmlwLXRpY2tldC1tYW5hZ2VtZW50LXN5c3RlbS9jbGllbnQvc3JjL3BhZ2VzL011bHRpcGxlRGF0ZVRyaXBzLmpzeCJ9

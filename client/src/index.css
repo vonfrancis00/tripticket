@@ -1,12 +1,12 @@
 .login-icon {
-  width: 64px;
-  height: 64px;
+  width: 220px;
+  height: 220px;
+  max-width: 100%;
+  justify-self: start;
+  justify-items: start;
   border-radius: 0;
-  background: url('/ched-logo.png') center / contain no-repeat;
-}
-
-.login-icon > svg {
-  display: none;
+  background: transparent;
+  object-fit: contain;
 }
 
 /* Labeled record cards keep phone screens free of sideways table scrolling. */

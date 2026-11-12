@@ -12,7 +12,8 @@ const displayTime = x => {
 
 // Coordinates are in points, matching the supplied A4 CHED form.
 export function buildTripTicketPdf(t, logo) {
-  const d = new jsPDF({unit:'pt',format:'a4'});
+  // Keep text and rules as vectors; compression is lossless, including the PNG logo.
+  const d = new jsPDF({unit:'pt',format:'a4',precision:4,compress:true});
   const right = 488, bottom = 815;
   let y = 210.6;
   d.setTextColor(0); d.setDrawColor(0); d.setLineWidth(.55);

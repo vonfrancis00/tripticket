@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShieldCheck, ArrowRight } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, LogIn } from 'lucide-react';
 export default function Login() {
   const { login } = useAuth(),
     nav = useNavigate(),
     [email, setEmail] = useState(''),
     [password, setPassword] = useState(''),
+    [showPassword, setShowPassword] = useState(false),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false);
   const submit = async (e) => {
@@ -40,7 +41,7 @@ export default function Login() {
             REPUBLIC OF THE PHILIPPINES · COMMISSION ON HIGHER EDUCATION
           </p>
           <h1>
-            Official travel.
+            Official Travel.
             <br />
             <em>Accountable Records.</em>
           </h1>
@@ -53,12 +54,12 @@ export default function Login() {
       </div>
       <div className="login-panel">
         <form className="login-card" onSubmit={submit}>
-          <div className="login-icon">
-            <ShieldCheck />
+          <div className="login-icon" aria-hidden="true">
+            <LogIn size={110} strokeWidth={1.5} />
           </div>
           <span className="eyebrow">WELCOME BACK</span>
-          <h2>Sign in to Your Workspace</h2>
-          <p>Use your assigned CHED email and Trip Ticket password.</p>
+          <h2>Sign in to your trips</h2>
+          <p>Use your assigned CHED email.</p>
           {error && <div className="alert error">{error}</div>}
           <label>
             Email Address
@@ -70,16 +71,29 @@ export default function Login() {
               autoComplete="username"
             />
           </label>
-          <label>
-            Password
+          <div className="login-password-group">
+            <label htmlFor="login-password">Password</label>
+            <div className="login-password-field">
             <input
-              type="password"
+              id="login-password"
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
             />
-          </label>
+          <button
+            type="button"
+            className="login-password-toggle"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-controls="login-password"
+            aria-pressed={showPassword}
+            onClick={() => setShowPassword((visible) => !visible)}
+          >
+            {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
+          </button>
+            </div>
+          </div>
           <button className="btn primary full" disabled={busy}>
             {busy ? 'Signing in…' : 'Sign in'}
             <ArrowRight size={17} />

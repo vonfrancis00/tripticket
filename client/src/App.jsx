@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Tickets from './pages/Tickets';
 import TicketForm from './pages/TicketForm';
+import MultipleDateTrips from './pages/MultipleDateTrips';
 import TicketDetail from './pages/TicketDetail';
 import Vehicles from './pages/Vehicles';
 import Users from './pages/Users';
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="tickets" element={<Tickets />} />
         <Route path="tickets/new" element={<TicketForm />} />
+        <Route path="tickets/multiple-dates" element={<MultipleDateTrips />} />
         <Route path="tickets/:id" element={<TicketDetail />} />
         <Route path="tickets/:id/preview" element={<TicketPreview />} />
         <Route path="tickets/:id/edit" element={<TicketForm />} />

@@ -1,22 +1,58 @@
 import { formatPassengerNames } from '../lib/passengerNames';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, FileDown, X } from 'lucide-react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft, FileDown, Trash2, X } from 'lucide-react';
+import { showDialog } from '../lib/dialog';
 import api from '../lib/api';
 import { createTripTicketPdf, makePdf } from '../lib/tripTicketPdf';
+import PdfPreview from '../components/PdfPreview';
 
 const value = (x) => (x === undefined || x === null || x === '' ? '—' : x);
 const date = (x) => (x ? new Date(x).toLocaleDateString() : '—');
+const displayTime = (time) => {
+  if (!time) return '';
+  const [hour, minute] = time.split(':');
+  return `${Number(hour) % 12 || 12}:${minute} ${Number(hour) >= 12 ? 'PM' : 'AM'}`;
+};
 const quantity = (x, unit) =>
   x === undefined || x === null || x === '' ? '—' : `${x} ${unit}`;
 
 export default function TicketPreview({ savedTicket = null }) {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const deletingRef = useRef(false);
   const [ticket, setTicket] = useState(savedTicket);
   const [error, setError] = useState('');
   const [pdfPreview, setPdfPreview] = useState(null);
   const [showPdf, setShowPdf] = useState(false);
   const pdfDialog = useRef(null);
+
+  const deleteTrip = async () => {
+    if (deletingRef.current) return;
+    deletingRef.current = true;
+    try {
+      const deleted = await showDialog({
+        title: 'Delete Trip?',
+        message: `Permanently delete trip ${ticket.ticketNo}? This cannot be undone.`,
+        confirm: true,
+        confirmLabel: 'Delete Trip',
+        loadingLabel: 'Deleting Trip...',
+        onConfirm: async () => {
+          try {
+            await api.delete(`/tickets/${id}`);
+          } catch (error) {
+            throw new Error(error.response?.data?.message || 'Unable to delete trip. Please try again.');
+          }
+        },
+      });
+      if (deleted) {
+        await showDialog({ type: 'success', title: 'Trip Deleted', message: 'The trip has been deleted successfully.', confirmLabel: 'Back to Records' });
+        navigate('/tickets', { replace: true });
+      }
+    } finally {
+      deletingRef.current = false;
+    }
+  };
 
   useEffect(() => {
     if (!showPdf) return;
@@ -79,7 +115,7 @@ export default function TicketPreview({ savedTicket = null }) {
     return (
       <div className="stack-lg">
         <Link to="/tickets" className="back-link">
-          <ArrowLeft size={15} /> Back to records
+          <ArrowLeft size={15} /> Back to Records
         </Link>
         <div role="status" className={error ? 'alert error' : ''}>
           {error || 'Loading trip preview…'}
@@ -115,7 +151,7 @@ export default function TicketPreview({ savedTicket = null }) {
       <div className="page-heading">
         <div>
           {!savedTicket && <Link to="/tickets" className="back-link">
-            <ArrowLeft size={15} /> Back to records
+            <ArrowLeft size={15} /> Back to Records
           </Link>}
           <span className="eyebrow">TRIP PREVIEW</span>
           <h1>{ticket.ticketNo}</h1>
@@ -134,14 +170,17 @@ export default function TicketPreview({ savedTicket = null }) {
             aria-expanded={showPdf}
             aria-controls="trip-pdf-preview"
           >
-            Show PDF preview
+            Show PDF Preview
           </button>
           {!savedTicket && <Link className="btn secondary" to={`/tickets/${id}`}>
-            Manage trip
+            Manage Trip
           </Link>}
           <button className="btn primary" onClick={() => makePdf(ticket)}>
             <FileDown size={16} /> Export PDF
           </button>
+          {!savedTicket && <button type="button" className="btn danger" onClick={deleteTrip}>
+            <Trash2 size={16} /> Delete Trip
+          </button>}
         </div>
       </div>
       {showPdf && <dialog
@@ -165,7 +204,7 @@ export default function TicketPreview({ savedTicket = null }) {
           </div>
         </div>
         {pdfPreview?.ticket === ticket && pdfPreview.url ? (
-          <iframe className="ticket-pdf-preview" title={`Trip ticket PDF preview: ${ticket.ticketNo}`} src={`${pdfPreview.url}#view=FitH&navpanes=0`} />
+          <PdfPreview url={pdfPreview.url} />
         ) : (
           <div className="pdf-preview-status" role="status">
             {pdfPreview?.ticket === ticket && pdfPreview.error ? pdfPreview.error : 'Preparing PDF preview...'}
@@ -176,7 +215,7 @@ export default function TicketPreview({ savedTicket = null }) {
       <section className="panel detail-panel">
         <div className="panel-heading">
           <div>
-            <h3>Section A · Travel details</h3>
+            <h3>Section A · Travel Details</h3>
             <p>Official travel authorization</p>
           </div>
         </div>
@@ -194,15 +233,15 @@ export default function TicketPreview({ savedTicket = null }) {
       <section className="panel detail-panel">
         <div className="panel-heading">
           <div>
-            <h3>Section B · Driver’s report</h3>
+            <h3>Section B · Driver’s Report</h3>
             <p>Recorded travel times, fuel consumption, and vehicle readings</p>
           </div>
         </div>
         {details([
-          ['Departure from office / garage', report.departureTime],
-          ['Arrival at destination', report.arrivalTime],
-          ['Departure from destination', report.destinationDepartureTime],
-          ['Arrival back at office / garage', report.returnTime],
+          ['Departure from office / garage', displayTime(report.departureTime)],
+          ['Arrival at destination', displayTime(report.arrivalTime)],
+          ['Departure from destination', displayTime(report.destinationDepartureTime)],
+          ['Arrival back at office / garage', displayTime(report.returnTime)],
           [
             'Approximate distance travelled',
             quantity(report.distanceTravelled, 'km'),

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
-import { AlertTriangle, LoaderCircle, X } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, LoaderCircle, X } from 'lucide-react';
 import { closeDialog, confirmDialog, getDialog, subscribeDialog } from '../lib/dialog';
 
 export default function AppDialog() {
@@ -27,7 +27,7 @@ export default function AppDialog() {
       <div className="app-dialog-header">
         <button type="button" className="app-dialog-close" disabled={current.pending} aria-label="Close popup" onClick={() => closeDialog()}><X size={20} /></button>
       </div>
-      <span className="app-dialog-icon" aria-hidden="true">{current.pending ? <LoaderCircle className="app-dialog-spinner" size={28} /> : <AlertTriangle size={28} />}</span>
+      <span className="app-dialog-icon" aria-hidden="true">{current.pending ? <LoaderCircle className="app-dialog-spinner" size={28} /> : current.type === 'success' ? <CheckCircle2 size={28} color="#147348" /> : <AlertTriangle size={28} />}</span>
       {current.title && <h2 id="app-dialog-title">{current.title}</h2>}
       <p id="app-dialog-message">{current.message}</p>
       {current.pending && <p role="status" className="app-dialog-progress">{current.loadingLabel || 'Processing...'}</p>}

@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import {
   LayoutDashboard,
   FilePlus2,
+  CalendarDays,
   ClipboardList,
   CarFront,
   Users,
@@ -16,6 +17,7 @@ import { useAuth } from '../context/AuthContext';
 const links = [
   ['/dashboard', 'Overview', LayoutDashboard],
   ['/tickets/new', 'Create Trip Ticket', FilePlus2],
+  ['/tickets/multiple-dates', 'Create Multiple Date Trips', CalendarDays],
   ['/tickets', 'Trip Ticket Records', ClipboardList],
   ['/vehicles', 'Vehicles', CarFront],
   ['/users', 'Users & Drivers', Users],

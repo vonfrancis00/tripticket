@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import TimeInput from '../components/TimeInput';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Save, ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { Save, ArrowLeft, ArrowRight, Check, LoaderCircle } from 'lucide-react';
+import { showDialog } from '../lib/dialog';
 import { Link } from 'react-router-dom';
 import api from '../lib/api';
 import TicketPreview from './TicketPreview';
@@ -23,6 +25,7 @@ const steps = [
 ];
 const num = (value) => Number(value || 0);
 export default function TicketForm({ publicMode = false }) {
+  const savingRef = useRef(false);
   const [savedTicket, setSavedTicket] = useState(null);
   const { id } = useParams(),
     nav = useNavigate(),
@@ -71,6 +74,7 @@ export default function TicketForm({ publicMode = false }) {
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
   const submit = async (e) => {
     e.preventDefault();
+    if (savingRef.current) return;
     if (step < 3) {
       if (
         step === 2 &&
@@ -85,6 +89,7 @@ export default function TicketForm({ publicMode = false }) {
       setStep(step + 1);
       return;
     }
+    savingRef.current = true;
     setBusy(true);
     setError('');
     try {
@@ -110,12 +115,16 @@ export default function TicketForm({ publicMode = false }) {
         ? await api.put(`/tickets/${id}`, payload)
         : await api.post('/tickets', payload);
       if (publicMode) setSavedTicket(r.data.ticket);
-      else nav(`/tickets/${r.data.ticket._id}`);
+      else if (id) {
+        await showDialog({ type: 'success', title: 'Trip saved successfully', message: 'Your trip details have been saved.', confirmLabel: 'Back to trip preview' });
+        nav(`/tickets/${r.data.ticket._id}/preview`);
+      } else nav(`/tickets/${r.data.ticket._id}`);
     } catch (err) {
       setError(
         err.response?.data?.message || err.message || 'Unable to save ticket.',
       );
     } finally {
+      savingRef.current = false;
       setBusy(false);
     }
   };
@@ -124,16 +133,21 @@ export default function TicketForm({ publicMode = false }) {
       ...previous,
       report: { ...previous.report, [key]: value },
     }));
-  const reportField = (label, key, type) => (
+  const reportField = (label, key, type, required = false) => (
     <label>
-      {label}
+      {label}{required && ' *'}
+      {type === 'time' ? (
+        <TimeInput label={label} value={form.report?.[key] ?? ''} required={required} onChange={(value) => setReport(key, value)} />
+      ) : (
       <input
         type={type}
+        required={required}
         min={type === 'number' ? 0 : undefined}
         step={type === 'number' ? 'any' : undefined}
         value={form.report?.[key] ?? ''}
         onChange={(e) => setReport(key, e.target.value)}
       />
+      )}
     </label>
   );
   if (savedTicket) return (
@@ -211,12 +225,12 @@ export default function TicketForm({ publicMode = false }) {
                 ? 'Enter the travel date, driver, and vehicle details.'
                 : step === 2
                   ? 'Add passengers, destination, and the purpose of travel.'
-                  : 'Optional. Complete the report after the trip.'}
+                  : 'Enter the required travel times and beginning and ending speedometer readings. Click Optional report fields to enter additional details.'}
             </p>
           </div>
         </div>
         <div
-          className="form-grid"
+          className={`form-grid${step === 3 ? ' driver-report-grid' : ''}`}
           role="group"
           aria-labelledby="ticket-step-title"
           key={step}
@@ -253,8 +267,9 @@ export default function TicketForm({ publicMode = false }) {
                 {!id && driversError && <span role="alert">{driversError}</span>}
               </label>
               <label>
-                Government Vehicle / Plate No.
+                Government Vehicle / Plate No. *
                 <select
+                  required
                   value={otherVehicle ? 'others' : form.vehicleId || ''}
                   onChange={(e) => {
                     setOtherVehicle(e.target.value === 'others');
@@ -285,17 +300,18 @@ export default function TicketForm({ publicMode = false }) {
                 </label>
               )}
               <label>
-                Vehicle Plate Number
+                Vehicle Plate Number *
                 <input
                   value={form.vehiclePlate || ''}
                   onChange={(e) => set('vehiclePlate', e.target.value)}
                   placeholder="e.g. ABC 1234"
+                  required
                 />
               </label>
             </>
           ) : step === 2 ? (
             <>
-              <fieldset className="passenger-fields">
+              <fieldset className="passenger-fields span-2">
                 <legend>Authorized passengers *</legend>
                 {form.passengerName.split('\n').map((name, index, names) => (
                   <div className="passenger-row" key={index}>
@@ -344,7 +360,7 @@ export default function TicketForm({ publicMode = false }) {
                   + Add passenger
                 </button>
               </fieldset>
-              <label>
+              <label className="span-2">
                 Place(s) to be visited / inspected *
                 <textarea
                   rows="2"
@@ -381,71 +397,33 @@ export default function TicketForm({ publicMode = false }) {
                 '1. Departure from office / garage',
                 'departureTime',
                 'time',
+                true,
               )}
-              {reportField('2. Arrival at destination', 'arrivalTime', 'time')}
+              {reportField('2. Arrival at destination', 'arrivalTime', 'time', true)}
               {reportField(
                 '3. Departure from destination',
                 'destinationDepartureTime',
                 'time',
+                true,
               )}
               {reportField(
                 '4. Arrival back at office / garage',
                 'returnTime',
                 'time',
+                true,
               )}
-              {reportField(
-                '5. Approximate distance travelled (km)',
-                'distanceTravelled',
-                'number',
-              )}
-              <div className="subsection-label span-2">
-                Gasoline issued, purchased and consumed (liters)
-              </div>
-              {reportField('a) Balance in tank', 'fuelBalance', 'number')}
-              {reportField(
-                'b) Issued by office from stock',
-                'fuelIssued',
-                'number',
-              )}
-              {reportField(
-                'c) Add-purchased during trip',
-                'fuelPurchased',
-                'number',
-              )}
-              <div className="computed-field">
-                <small>TOTAL FUEL AVAILABLE</small>
-                <b>
-                  {num(form.report?.fuelBalance) +
-                    num(form.report?.fuelIssued) +
-                    num(form.report?.fuelPurchased)}{' '}
-                  liters
-                </b>
-              </div>
-              {reportField('d) Used during the trip', 'fuelUsed', 'number')}
-              {reportField(
-                'e) Balance in tank at end trip',
-                'fuelEndingBalance',
-                'number',
-              )}
-              <div className="subsection-label span-2">
-                Vehicle supplies and speedometer
-              </div>
-              {reportField('7. Gear oil used (liters)', 'gearOil', 'number')}
-              {reportField(
-                '8. Lubricating oil used (liters)',
-                'lubricatingOil',
-                'number',
-              )}
-              {reportField('9. Grease issued (liters)', 'grease', 'number')}
+              <div className="subsection-label span-2">Speedometer</div>
               {reportField(
                 '10a. Speedometer at beginning (kms)',
                 'speedometerStart',
                 'number',
+                true,
               )}
               {reportField(
                 '10b. Speedometer at end (kms)',
                 'speedometerEnd',
                 'number',
+                true,
               )}
               <div className="computed-field">
                 <small>10c. DISTANCE TRAVELLED</small>
@@ -458,19 +436,68 @@ export default function TicketForm({ publicMode = false }) {
                   kms
                 </b>
               </div>
-              <label className="span-2">
-                11. Remarks
-                <textarea
-                  rows="3"
-                  value={form.report?.remarks || ''}
-                  onChange={(e) => setReport('remarks', e.target.value)}
-                />
-              </label>
-              {reportField(
-                'Passenger certification date',
-                'passengerSignedDate',
-                'date',
-              )}
+              <details className="optional-report span-2">
+                <summary>Optional report fields</summary>
+                <div className="form-grid driver-report-grid optional-report-fields">
+                  {reportField(
+                    '5. Approximate distance travelled (km)',
+                    'distanceTravelled',
+                    'number',
+                  )}
+                  <div className="subsection-label span-2">
+                    Gasoline issued, purchased and consumed (liters)
+                  </div>
+                  {reportField('a) Balance in tank', 'fuelBalance', 'number')}
+                  {reportField(
+                    'b) Issued by office from stock',
+                    'fuelIssued',
+                    'number',
+                  )}
+                  {reportField(
+                    'c) Add-purchased during trip',
+                    'fuelPurchased',
+                    'number',
+                  )}
+                  <div className="computed-field">
+                    <small>TOTAL FUEL AVAILABLE</small>
+                    <b>
+                      {num(form.report?.fuelBalance) +
+                        num(form.report?.fuelIssued) +
+                        num(form.report?.fuelPurchased)}{' '}
+                      liters
+                    </b>
+                  </div>
+                  {reportField('d) Used during the trip', 'fuelUsed', 'number')}
+                  {reportField(
+                    'e) Balance in tank at end trip',
+                    'fuelEndingBalance',
+                    'number',
+                  )}
+                  <div className="subsection-label span-2">
+                    Vehicle supplies
+                  </div>
+                  {reportField('7. Gear oil used (liters)', 'gearOil', 'number')}
+                  {reportField(
+                    '8. Lubricating oil used (liters)',
+                    'lubricatingOil',
+                    'number',
+                  )}
+                  {reportField('9. Grease issued (liters)', 'grease', 'number')}
+                  <label className="span-2">
+                    11. Remarks
+                    <textarea
+                      rows="3"
+                      value={form.report?.remarks || ''}
+                      onChange={(e) => setReport('remarks', e.target.value)}
+                    />
+                  </label>
+                  {reportField(
+                    'Passenger certification date',
+                    'passengerSignedDate',
+                    'date',
+                  )}
+                </div>
+              </details>
               <p className="muted span-2">
                 Driver and passenger signatures are signed on the printed copy.
               </p>
@@ -509,7 +536,7 @@ export default function TicketForm({ publicMode = false }) {
                 </>
               ) : (
                 <>
-                  <Save size={17} />
+                  {busy ? <LoaderCircle size={17} className="app-dialog-spinner" aria-hidden="true" /> : <Save size={17} />}
                   {busy ? 'Saving...' : 'Save Trip Ticket'}
                 </>
               )}
